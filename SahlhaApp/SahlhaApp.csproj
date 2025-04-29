@@ -32,10 +32,11 @@
     <Folder Include="Areas\Provider\Controllers\" />
   </ItemGroup>
 
+
+
   <ItemGroup>
     <ProjectReference Include="..\SahlhaApp.DataAccess\SahlhaApp.DataAccess.csproj" />
     <ProjectReference Include="..\SahlhaApp.Models\SahlhaApp.Models.csproj" />
     <ProjectReference Include="..\SahlhaApp.Utility\SahlhaApp.Utility.csproj" />
   </ItemGroup>
-
 </Project>

@@ -1,4 +1,5 @@
-﻿using SahlhaApp.DataAccess.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using SahlhaApp.DataAccess.Data;
 using SahlhaApp.DataAccess.Repositories.IRepositories;
 using System;
 using System.Collections.Generic;

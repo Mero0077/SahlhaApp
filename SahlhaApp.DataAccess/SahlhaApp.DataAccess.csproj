@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SahlhaApp.Models\SahlhaApp.Models.csproj" />
 	  <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.4" />
 	  <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.4" />
 	  <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0" />
@@ -24,6 +23,10 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SahlhaApp.Models\SahlhaApp.Models.csproj" />
   </ItemGroup>
 
 </Project>
