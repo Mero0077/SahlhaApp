@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace SahlhaApp.Controllers
 {
@@ -17,7 +17,7 @@ namespace SahlhaApp.Controllers
         {
             _logger = logger;
         }
-
+        //;كسمك
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
