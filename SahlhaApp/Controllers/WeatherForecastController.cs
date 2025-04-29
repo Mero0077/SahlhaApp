@@ -17,7 +17,6 @@ namespace SahlhaApp.Controllers
         {
             _logger = logger;
         }
-        //;كسمك
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
