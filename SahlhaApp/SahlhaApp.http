@@ -1,0 +1,6 @@
+@SahlhaApp_HostAddress = http://localhost:5234
+
+GET {{SahlhaApp_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
