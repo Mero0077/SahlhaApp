@@ -7,6 +7,7 @@ using SahlhaApp.DataAccess.Repositories;
 using SahlhaApp.DataAccess.Repositories.IRepositories;
 using SahlhaApp.Models.Models;
 using SahlhaApp.Utility;
+using Stripe;
 using System.Text;
 
 
@@ -54,6 +55,23 @@ builder.Services.AddAuthentication(options =>
 
 //------------------------------------------------------
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IProviderRepository, ProviderRepositry>();
+builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
+builder.Services.AddScoped<IProviderSubServicesRepository, ProviderSubServicesRepository>();
+builder.Services.AddScoped<IPendingProviderVerificationRepository, PendingProviderVerificationRepository>();
+builder.Services.AddScoped<ISubServiceRepositry, SubServiceRepository>();
+builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
+builder.Services.AddScoped<IProviderServiceAvailabilityRepository, ProviderServiceAvailabilityRepository>();
+builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
+builder.Services.AddScoped<IDocumentTypeRepository, DocumentTypeRepository>();
+builder.Services.AddScoped<IJobRepository, JobRepository>();
+builder.Services.AddScoped<ITaskBidRepository, TaskBidRepository>();
+builder.Services.AddScoped<ITaskAssignmentRepository, TaskAssignmentRepository>();
+builder.Services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+builder.Services.AddScoped<IDisputeRepository, DisputeRepository>();
+builder.Services.AddScoped<INoficationRepository, NoficationRepository>();
+builder.Services.AddScoped<IRateRepository, RateRepository>();
 
 var app = builder.Build();
 

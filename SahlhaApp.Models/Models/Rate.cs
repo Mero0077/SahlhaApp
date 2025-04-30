@@ -9,8 +9,8 @@ namespace SahlhaApp.Models.Models
     public class Rate
     {
         public int Id { get; set; }
-        public int RateValue { get; set; } // 1-5
-        public string Comment { get; set; }
+        public int? RateValue { get; set; } // 1-5
+        public string? Comment { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public string ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
