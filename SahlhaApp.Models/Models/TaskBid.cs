@@ -9,14 +9,13 @@ namespace SahlhaApp.Models.Models
     public class TaskBid
     {
         public int Id { get; set; }
-        public decimal? Price { get; set; }
+        public string? Description { get; set; }
+        public decimal Amount { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public TimeOnly EstimatedTime { get; set; }
-        public decimal? PaidAmount { get; set; }
-        //Navigation Prop 
-        public Task Task { get; set; }
-        public int TaskId { get; set; }
-        public Provider Provider { get; set; }
+        public int Duration { get; set; }
+        public int JobId { get; set; }
+        public Job Job { get; set; }
         public int ProviderId { get; set; }
+        public Provider Provider { get; set; }
     }
 }

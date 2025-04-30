@@ -6,17 +6,15 @@ using System.Threading.Tasks;
 
 namespace SahlhaApp.Models.Models
 {
-    public class Notification
+    public class Nofication
     {
-        public int Id { get; set; }
-        public string? Title { get; set; }
-        public string? Message { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public int Id   { get; set; }
+        public string Title { get; set; }
+        public string Message { get; set; }
         public bool IsRead { get; set; } = false;
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime SentAt { get; set; } = DateTime.Now;
-        //Navigation Prop 
         public string ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
-
     }
 }

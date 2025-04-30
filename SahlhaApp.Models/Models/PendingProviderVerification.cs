@@ -15,14 +15,10 @@ namespace SahlhaApp.Models.Models
     public class PendingProviderVerification
     {
         public int Id { get; set; }
-        public DateTime AppliedAt { get; set; } = DateTime.Now;
-
-        public VerificationStatus Status { get; set; } = VerificationStatus.Pending;
+        public DateTime appliedAt { get; set; } = DateTime.Now;
+        public VerificationStatus VerificationStatus { get; set; } = VerificationStatus.Pending;
         public string? RejectionReason { get; set; }
-
-
-        // Navigation properties
-        public string ApplicationUserId { get; set; }
+        public string ApplicationUserId { get; set; }  
         public ApplicationUser ApplicationUser { get; set; }
     }
 }

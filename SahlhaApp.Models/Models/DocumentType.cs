@@ -9,9 +9,7 @@ namespace SahlhaApp.Models.Models
     public class DocumentType
     {
         public int Id { get; set; }
-        public string? Name { get; set; }
-        //Navigation Prop 
+        public string Name { get; set; }
         public ICollection<Document> Documents { get; set; }
-
     }
 }

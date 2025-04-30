@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace SahlhaApp.Models.Models
 {
-    public class MonthlySubscription
+    public class ProviderSubServices
     {
         public int Id { get; set; }
-        public decimal? Price { get; set; }
-        //Navigation Prop
-        
-        public Provider Provider { get; set; }
+        public int SubServiceId { get; set; }
+        public SubService SubService { get; set; }
         public int ProviderId { get; set; }
+        public Provider Provider { get; set; }
     }
 }

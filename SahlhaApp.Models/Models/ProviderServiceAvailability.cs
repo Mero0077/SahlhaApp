@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace SahlhaApp.Models.Models
 {
-    public class Chat
+    public class ProviderServiceAvailability
     {
         public int Id { get; set; }
-        public  DateTime CreatedAt { get; set; }
-        //Navigation Prop 
-
-
-
+        public string Day { get; set; }
+        public int ProviderId { get; set; }
+        public Provider Provider { get; set; }
     }
 }

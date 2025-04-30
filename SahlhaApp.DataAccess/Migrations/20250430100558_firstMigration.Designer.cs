@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SahlhaApp.DataAccess.Data;
 
@@ -11,9 +12,11 @@ using SahlhaApp.DataAccess.Data;
 namespace SahlhaApp.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250430100558_firstMigration")]
+    partial class firstMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -268,246 +271,6 @@ namespace SahlhaApp.DataAccess.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("SahlhaApp.Models.Models.Dispute", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("ResolvedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("TaskAssignmentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("TaskAssignmentId")
-                        .IsUnique();
-
-                    b.ToTable("Disputes");
-                });
-
-            modelBuilder.Entity("SahlhaApp.Models.Models.Document", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("DocumentTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ProviderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UploadedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("VerifiedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DocumentTypeId");
-
-                    b.HasIndex("ProviderId");
-
-                    b.ToTable("Documents");
-                });
-
-            modelBuilder.Entity("SahlhaApp.Models.Models.DocumentType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DocumentTypes");
-                });
-
-            modelBuilder.Entity("SahlhaApp.Models.Models.Job", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Duration")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("taskStatus")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.ToTable("Jobs");
-                });
-
-            modelBuilder.Entity("SahlhaApp.Models.Models.Nofication", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsRead")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("SentAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.ToTable("Nofications");
-                });
-
-            modelBuilder.Entity("SahlhaApp.Models.Models.Payment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("PaymentDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("PaymentMethodId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PaymentReference")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ProviderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TaskAssignmentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TransactionId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("PaymentMethodId");
-
-                    b.HasIndex("ProviderId");
-
-                    b.HasIndex("TaskAssignmentId")
-                        .IsUnique();
-
-                    b.ToTable("Payments");
-                });
-
-            modelBuilder.Entity("SahlhaApp.Models.Models.PaymentMethod", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PaymentMethods");
-                });
-
             modelBuilder.Entity("SahlhaApp.Models.Models.PendingProviderVerification", b =>
                 {
                     b.Property<int>("Id")
@@ -556,14 +319,8 @@ namespace SahlhaApp.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<TimeOnly>("EndTime")
-                        .HasColumnType("time");
-
                     b.Property<decimal>("HourlyRate")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<TimeOnly>("StartTime")
-                        .HasColumnType("time");
 
                     b.Property<string>("VerificationLevel")
                         .IsRequired()
@@ -575,28 +332,6 @@ namespace SahlhaApp.DataAccess.Migrations
                         .IsUnique();
 
                     b.ToTable("Providers");
-                });
-
-            modelBuilder.Entity("SahlhaApp.Models.Models.ProviderServiceAvailability", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Day")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ProviderId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProviderId");
-
-                    b.ToTable("ProviderServiceAvailability");
                 });
 
             modelBuilder.Entity("SahlhaApp.Models.Models.ProviderSubServices", b =>
@@ -620,45 +355,6 @@ namespace SahlhaApp.DataAccess.Migrations
                     b.HasIndex("SubServiceId");
 
                     b.ToTable("ProviderSubServices");
-                });
-
-            modelBuilder.Entity("SahlhaApp.Models.Models.Rate", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ApplicationUserId1")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Comment")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ProviderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RateValue")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("ApplicationUserId1");
-
-                    b.HasIndex("ProviderId");
-
-                    b.ToTable("Rates");
                 });
 
             modelBuilder.Entity("SahlhaApp.Models.Models.Service", b =>
@@ -751,73 +447,6 @@ namespace SahlhaApp.DataAccess.Migrations
                     b.ToTable("Subscriptions");
                 });
 
-            modelBuilder.Entity("SahlhaApp.Models.Models.TaskAssignment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("AssignedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("FinalPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<bool>("IsAccepted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("JobId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProviderId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("JobId");
-
-                    b.HasIndex("ProviderId");
-
-                    b.ToTable("TaskAssignments");
-                });
-
-            modelBuilder.Entity("SahlhaApp.Models.Models.TaskBid", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Duration")
-                        .HasColumnType("int");
-
-                    b.Property<int>("JobId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProviderId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("JobId");
-
-                    b.HasIndex("ProviderId");
-
-                    b.ToTable("TaskBids");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -869,97 +498,6 @@ namespace SahlhaApp.DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SahlhaApp.Models.Models.Dispute", b =>
-                {
-                    b.HasOne("SahlhaApp.Models.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("Disputes")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SahlhaApp.Models.Models.TaskAssignment", "TaskAssignment")
-                        .WithOne("Dispute")
-                        .HasForeignKey("SahlhaApp.Models.Models.Dispute", "TaskAssignmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-
-                    b.Navigation("TaskAssignment");
-                });
-
-            modelBuilder.Entity("SahlhaApp.Models.Models.Document", b =>
-                {
-                    b.HasOne("SahlhaApp.Models.Models.DocumentType", "DocumentType")
-                        .WithMany("Documents")
-                        .HasForeignKey("DocumentTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SahlhaApp.Models.Models.Provider", "Provider")
-                        .WithMany("Documents")
-                        .HasForeignKey("ProviderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("DocumentType");
-
-                    b.Navigation("Provider");
-                });
-
-            modelBuilder.Entity("SahlhaApp.Models.Models.Job", b =>
-                {
-                    b.HasOne("SahlhaApp.Models.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("Tasks")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-                });
-
-            modelBuilder.Entity("SahlhaApp.Models.Models.Nofication", b =>
-                {
-                    b.HasOne("SahlhaApp.Models.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("Nofications")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-                });
-
-            modelBuilder.Entity("SahlhaApp.Models.Models.Payment", b =>
-                {
-                    b.HasOne("SahlhaApp.Models.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("Payments")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SahlhaApp.Models.Models.PaymentMethod", "PaymentMethod")
-                        .WithMany("Payments")
-                        .HasForeignKey("PaymentMethodId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SahlhaApp.Models.Models.Provider", null)
-                        .WithMany("Payments")
-                        .HasForeignKey("ProviderId");
-
-                    b.HasOne("SahlhaApp.Models.Models.TaskAssignment", "TaskAssignment")
-                        .WithOne("Payment")
-                        .HasForeignKey("SahlhaApp.Models.Models.Payment", "TaskAssignmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-
-                    b.Navigation("PaymentMethod");
-
-                    b.Navigation("TaskAssignment");
-                });
-
             modelBuilder.Entity("SahlhaApp.Models.Models.PendingProviderVerification", b =>
                 {
                     b.HasOne("SahlhaApp.Models.Models.ApplicationUser", "ApplicationUser")
@@ -982,17 +520,6 @@ namespace SahlhaApp.DataAccess.Migrations
                     b.Navigation("ApplicationUser");
                 });
 
-            modelBuilder.Entity("SahlhaApp.Models.Models.ProviderServiceAvailability", b =>
-                {
-                    b.HasOne("SahlhaApp.Models.Models.Provider", "Provider")
-                        .WithMany("ProviderServiceAvailability")
-                        .HasForeignKey("ProviderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Provider");
-                });
-
             modelBuilder.Entity("SahlhaApp.Models.Models.ProviderSubServices", b =>
                 {
                     b.HasOne("SahlhaApp.Models.Models.Provider", "Provider")
@@ -1010,29 +537,6 @@ namespace SahlhaApp.DataAccess.Migrations
                     b.Navigation("Provider");
 
                     b.Navigation("SubService");
-                });
-
-            modelBuilder.Entity("SahlhaApp.Models.Models.Rate", b =>
-                {
-                    b.HasOne("SahlhaApp.Models.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SahlhaApp.Models.Models.ApplicationUser", null)
-                        .WithMany("rates")
-                        .HasForeignKey("ApplicationUserId1");
-
-                    b.HasOne("SahlhaApp.Models.Models.Provider", "Provider")
-                        .WithMany("Rates")
-                        .HasForeignKey("ProviderId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-
-                    b.Navigation("Provider");
                 });
 
             modelBuilder.Entity("SahlhaApp.Models.Models.SubService", b =>
@@ -1057,95 +561,20 @@ namespace SahlhaApp.DataAccess.Migrations
                     b.Navigation("Provider");
                 });
 
-            modelBuilder.Entity("SahlhaApp.Models.Models.TaskAssignment", b =>
-                {
-                    b.HasOne("SahlhaApp.Models.Models.Job", "Job")
-                        .WithMany("TaskAssignments")
-                        .HasForeignKey("JobId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("SahlhaApp.Models.Models.Provider", "Provider")
-                        .WithMany("TaskAssignments")
-                        .HasForeignKey("ProviderId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Job");
-
-                    b.Navigation("Provider");
-                });
-
-            modelBuilder.Entity("SahlhaApp.Models.Models.TaskBid", b =>
-                {
-                    b.HasOne("SahlhaApp.Models.Models.Job", "Job")
-                        .WithMany()
-                        .HasForeignKey("JobId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SahlhaApp.Models.Models.Provider", "Provider")
-                        .WithMany("TaskBids")
-                        .HasForeignKey("ProviderId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Job");
-
-                    b.Navigation("Provider");
-                });
-
             modelBuilder.Entity("SahlhaApp.Models.Models.ApplicationUser", b =>
                 {
-                    b.Navigation("Disputes");
-
-                    b.Navigation("Nofications");
-
-                    b.Navigation("Payments");
-
                     b.Navigation("PendingProviderVerification")
                         .IsRequired();
 
                     b.Navigation("Provider")
                         .IsRequired();
-
-                    b.Navigation("Tasks");
-
-                    b.Navigation("rates");
-                });
-
-            modelBuilder.Entity("SahlhaApp.Models.Models.DocumentType", b =>
-                {
-                    b.Navigation("Documents");
-                });
-
-            modelBuilder.Entity("SahlhaApp.Models.Models.Job", b =>
-                {
-                    b.Navigation("TaskAssignments");
-                });
-
-            modelBuilder.Entity("SahlhaApp.Models.Models.PaymentMethod", b =>
-                {
-                    b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("SahlhaApp.Models.Models.Provider", b =>
                 {
-                    b.Navigation("Documents");
-
-                    b.Navigation("Payments");
-
-                    b.Navigation("ProviderServiceAvailability");
-
                     b.Navigation("ProviderServices");
 
-                    b.Navigation("Rates");
-
                     b.Navigation("Subscription");
-
-                    b.Navigation("TaskAssignments");
-
-                    b.Navigation("TaskBids");
                 });
 
             modelBuilder.Entity("SahlhaApp.Models.Models.Service", b =>
@@ -1156,15 +585,6 @@ namespace SahlhaApp.DataAccess.Migrations
             modelBuilder.Entity("SahlhaApp.Models.Models.SubService", b =>
                 {
                     b.Navigation("ProviderServices");
-                });
-
-            modelBuilder.Entity("SahlhaApp.Models.Models.TaskAssignment", b =>
-                {
-                    b.Navigation("Dispute")
-                        .IsRequired();
-
-                    b.Navigation("Payment")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

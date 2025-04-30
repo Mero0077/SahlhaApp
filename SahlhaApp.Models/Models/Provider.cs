@@ -3,35 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Stripe;
 
 namespace SahlhaApp.Models.Models
 {
-    public class Provider 
+    public class Provider
     {
         public int Id { get; set; }
-        public string? VerificationLevel { get; set; }
-        public bool? VerificationStatus { get; set; }
-        public int? CompletedTasks { get; set; }
-        public int? TotalTasks { get; set; }
-        public string? Brief { get; set; }
-        public string[]? Skills { get; set; }
-        public decimal? HourlyRate { get; set; }
-        public TimeOnly AvailableFrom { get; set; }
-        public TimeOnly AvailableTo { get; set; }
-        //Navigation Prop 
-        public String ApplicationUserId { get; set; }
+        public string VerificationLevel { get; set; } = "Unverified";
+        public int CompletedTasks { get; set; } = 0;
+        public string Description { get; set; }
+        public decimal HourlyRate { get; set; }
+        public TimeOnly StartTime { get; set; }
+        public TimeOnly EndTime { get; set; }
+
+        public string ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
-        public ICollection<MonthlySubscription> MonthlySubscriptions { get; set; }
+
+        public ICollection<Subscription> Subscription { get; set; }
+        public ICollection<ProviderSubServices> ProviderServices { get; set; }
+        public ICollection<ProviderServiceAvailability> ProviderServiceAvailability { get; set; }
         public ICollection<Document> Documents { get; set; }
-        public ICollection<Review> Reviews { get; set; }
-        public ICollection<SubService> SubServices { get; set; }
+        public ICollection<TaskBid> TaskBids { get; set; }
+        public ICollection<TaskAssignment> TaskAssignments { get; set; }
+        public ICollection<Payment> Payments { get; set; }
         public ICollection<Rate> Rates { get; set; }
-        public ICollection<ProviderServicesAvailability> ProviderServicesAvailability { get; set; }
-        public TaskBid TaskBid { get; set; }
-        public TaskAssignment TaskAssignment { get; set; }
-        public Payment Payment { get; set; }
-
-
     }
+
 }
