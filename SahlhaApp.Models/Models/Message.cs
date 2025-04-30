@@ -12,5 +12,6 @@ namespace SahlhaApp.Models.Models
         public bool IsRead { get; set; } = false;
         public DateTime SentAt { get; set; } = DateTime.Now;
         public string? Description { get; set; }
+        //Navigation Prop
     }
 }

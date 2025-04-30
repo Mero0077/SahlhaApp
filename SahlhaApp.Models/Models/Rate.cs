@@ -11,6 +11,11 @@ namespace SahlhaApp.Models.Models
         public int Id { get; set; }
         public string? Comment { get; set; }
         public double? RateValue { get; set; }
+        //Navigation Prop
+        public string ApplicationUserId { get; set; }
+        public int ProviderId { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
+        public Provider Provider { get; set; }
 
     }
 }

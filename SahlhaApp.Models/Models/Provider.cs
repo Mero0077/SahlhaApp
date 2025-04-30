@@ -7,7 +7,7 @@ using Stripe;
 
 namespace SahlhaApp.Models.Models
 {
-    public class Provider
+    public class Provider 
     {
         public int Id { get; set; }
         public string? VerificationLevel { get; set; }
@@ -20,15 +20,17 @@ namespace SahlhaApp.Models.Models
         public TimeOnly AvailableFrom { get; set; }
         public TimeOnly AvailableTo { get; set; }
         //Navigation Prop 
-        public String? ApplicationUserId { get; set; }
-        public ApplicationUser? ApplicationUser { get; set; }
-        public ICollection<MonthlySubscription>? MonthlySubscriptions { get; set; }
-        public ICollection<Document>? Documents { get; set; }
+        public String ApplicationUserId { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
+        public ICollection<MonthlySubscription> MonthlySubscriptions { get; set; }
+        public ICollection<Document> Documents { get; set; }
         public ICollection<Review> Reviews { get; set; }
         public ICollection<SubService> SubServices { get; set; }
-        public TaskBid TaskBids { get; set; }
+        public ICollection<Rate> Rates { get; set; }
+        public ICollection<ProviderServicesAvailability> ProviderServicesAvailability { get; set; }
+        public TaskBid TaskBid { get; set; }
+        public TaskAssignment TaskAssignment { get; set; }
         public Payment Payment { get; set; }
-        public ICollection<ProviderServicesAvailability>? ProviderServicesAvailability { get; set; }
 
 
     }

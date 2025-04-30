@@ -13,5 +13,6 @@ namespace SahlhaApp.Models.Models
         //Navigation Prop 
         public Payment Payment { get; set; }
 
+
     }
 }

@@ -18,8 +18,5 @@ namespace SahlhaApp.Models.Models
         public int TaskId { get; set; }
         public Provider Provider { get; set; }
         public int ProviderId { get; set; }
-
-
-
     }
 }

@@ -17,7 +17,7 @@ namespace SahlhaApp.Models.Models
         public decimal? BasePrice { get; set; }
         public bool Status { get; set; } = true;
         //Navigation Prop 
-        public ICollection<Provider>? Providers { get; set; }
+        public ICollection<Provider> Providers { get; set; }
         public int ServiceId { get; set; }
         public Service Service { get; set; }
     }

@@ -16,7 +16,7 @@ namespace SahlhaApp.Models.Models
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         //Navigation Prop 
-        public ICollection<SubService>? SubServices { get; set; }
+        public ICollection<SubService> SubServices { get; set; }
 
     }
 }

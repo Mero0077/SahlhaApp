@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace SahlhaApp.DataAccess.Data
@@ -21,7 +21,7 @@ namespace SahlhaApp.DataAccess.Data
             this.userManager = userManager;
             this.identityRole = identityRole;
         }
-        public static async Task InitializeAsync(IServiceProvider serviceProvider)
+        public static async System.Threading.Tasks.Task InitializeAsync(IServiceProvider serviceProvider)
         {
             // Create a new service scope (since we're outside the HTTP request lifecycle)
             using var scope = serviceProvider.CreateScope();

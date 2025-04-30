@@ -28,12 +28,13 @@ namespace SahlhaApp.Models.Models
         //Provider Status
         public bool? IsProvider { get; set; } = false;
         //Navigation Prop
-        public ICollection<Task>? Tasks { get; set; }
         public Provider Provider { get; set; }
-        public ICollection<Notification> Notifications { get; set; }
         public PendingProviderVerification PendingProviderVerifications { get; set; }
+        public Payment? Payment { get; set; }
+        public ICollection<Task> Tasks { get; set; }
+        public ICollection<Notification> Notifications { get; set; }
+        public ICollection<Dispute> Disputes { get; set; }  
+        public ICollection<Rate> Rates { get; set; }
         public ICollection<Review> Reviews { get; set; }
-        public Payment Payment { get; set; }
-
     }
 }
