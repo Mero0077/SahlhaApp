@@ -11,6 +11,8 @@ using System.Text;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using SahlhaApp.Models.DTOs.Request;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using SahlhaApp.Models.DTOs.Request.RegisterRequest;
+using SahlhaApp.Models.DTOs.Request.PasswordRequests;
 
 namespace SahlhaApp.Areas.Identity
 {
