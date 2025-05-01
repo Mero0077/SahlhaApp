@@ -76,6 +76,9 @@ namespace SahlhaApp.Areas.Identity
             return BadRequest(ModelState);
         }
 
+
+
+        [HttpPost("ConfirmEmail")]
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
         {
             var user = await _userManager.FindByIdAsync(userId);

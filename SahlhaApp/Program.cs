@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -11,28 +11,22 @@ using Scalar.AspNetCore;
 using Stripe;
 using System.Text;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
 // Add DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-        .AddEntityFrameworkStores<ApplicationDbContext>()
-          .AddDefaultTokenProviders();
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
 
-// Add JWT
-
-//------------------------------------------------------
-
+// JWT Configuration
 var jwtoptions = builder.Configuration.GetSection("Jwt").Get<JwtOptions>();
 builder.Services.AddSingleton(jwtoptions);
 
@@ -40,7 +34,8 @@ builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options =>
+})
+.AddJwtBearer(options =>
 {
     options.SaveToken = true;
     options.RequireHttpsMetadata = false;
@@ -54,44 +49,32 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-//------------------------------------------------------
+// Repositories
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IProviderRepository, ProviderRepositry>();
-builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
-builder.Services.AddScoped<IProviderSubServicesRepository, ProviderSubServicesRepository>();
-builder.Services.AddScoped<IPendingProviderVerificationRepository, PendingProviderVerificationRepository>();
-builder.Services.AddScoped<ISubServiceRepositry, SubServiceRepository>();
-builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
-builder.Services.AddScoped<IProviderServiceAvailabilityRepository, ProviderServiceAvailabilityRepository>();
-builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
-builder.Services.AddScoped<IDocumentTypeRepository, DocumentTypeRepository>();
-builder.Services.AddScoped<IJobRepository, JobRepository>();
-builder.Services.AddScoped<ITaskBidRepository, TaskBidRepository>();
-builder.Services.AddScoped<ITaskAssignmentRepository, TaskAssignmentRepository>();
-builder.Services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
-builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
-builder.Services.AddScoped<IDisputeRepository, DisputeRepository>();
-builder.Services.AddScoped<INotificationRepository, NoficationRepository>();
-builder.Services.AddScoped<IRateRepository, RateRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
-    app.MapScalarApiReference();
-
+    try
+    {
+        app.MapOpenApi();
+        app.MapScalarApiReference();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error initializing OpenAPI: {ex.Message}");
+    }
 }
 
-// Call DbInitializer here:
+// Seed database
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     try
     {
-        await DbInitializer.InitializeAsync(services); //  Now allowed
+        await DbInitializer.InitializeAsync(services);
     }
     catch (Exception ex)
     {
@@ -101,6 +84,7 @@ using (var scope = app.Services.CreateScope())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
