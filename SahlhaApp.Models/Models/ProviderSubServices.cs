@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SahlhaApp.Models.Models.Providers
+namespace SahlhaApp.Models.Models
 {
-    public class ProviderServiceAvailability
+    public class ProviderSubServices
     {
         public int Id { get; set; }
-        public string Day { get; set; }
+        public int SubServiceId { get; set; }
+        public SubService SubService { get; set; }
         public int ProviderId { get; set; }
         public Provider Provider { get; set; }
     }

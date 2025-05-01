@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SahlhaApp.Models.Models.Tasks
+namespace SahlhaApp.Models.Models
 {
     public enum TaskStatus
     {

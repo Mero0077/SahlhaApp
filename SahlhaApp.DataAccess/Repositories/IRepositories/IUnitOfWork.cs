@@ -12,7 +12,7 @@ namespace SahlhaApp.DataAccess.Repositories.IRepositories
         IDocumentRepository Document { get; }
         IDocumentTypeRepository DocumentType { get; } 
         IJobRepository Job { get; }
-        INoficationRepository Notification { get; }
+        INotificationRepository Notification { get; }
         IPaymentRepository Payment { get; }
         IPaymentMethodRepository PaymentMethod { get; }
         IPendingProviderVerificationRepository PendingProviderVerification { get; }

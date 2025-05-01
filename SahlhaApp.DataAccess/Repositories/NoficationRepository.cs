@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SahlhaApp.DataAccess.Repositories
 {
-    public class NoficationRepository : Repository<Nofication>, INoficationRepository
+    public class NoficationRepository : Repository<Notification>, INotificationRepository
     {
         public NoficationRepository(ApplicationDbContext dbContext) : base(dbContext)
         {

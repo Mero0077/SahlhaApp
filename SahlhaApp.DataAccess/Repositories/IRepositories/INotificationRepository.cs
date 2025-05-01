@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SahlhaApp.DataAccess.Repositories.IRepositories
 {
-    public interface INoficationRepository : IRepository<Nofication>
+    public interface INotificationRepository : IRepository<Notification>
     {
     }
 }

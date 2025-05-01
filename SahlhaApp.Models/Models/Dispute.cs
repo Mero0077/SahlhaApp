@@ -13,7 +13,7 @@ namespace SahlhaApp.Models.Models
         public string Description { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public bool Status { get; set; } = false; // false = open, true = closed
-        public DateTime ResolvedAt { get; set; } 
+        public DateTime ResolvedAt { get; set; }
         public string ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
         public int TaskAssignmentId { get; set; }
