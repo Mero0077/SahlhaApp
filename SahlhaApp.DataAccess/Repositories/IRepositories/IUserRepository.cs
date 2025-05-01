@@ -1,4 +1,4 @@
-﻿using SahlhaApp.Models.DTOs.Response;
+﻿using SahlhaApp.Models.DTOs.Response.ProfileResponse;
 using SahlhaApp.Models.Models;
 using System;
 using System.Collections.Generic;

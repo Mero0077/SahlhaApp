@@ -8,6 +8,25 @@ namespace SahlhaApp.DataAccess.Repositories.IRepositories
 {
     public interface IUnitOfWork
     {
+        IProviderRepository Provider { get; }
+        IDocumentRepository Document { get; }
+        IDocumentTypeRepository DocumentType { get; } 
+        IJobRepository Job { get; }
+        INoficationRepository Notification { get; }
+        IPaymentRepository Payment { get; }
+        IPaymentMethodRepository PaymentMethod { get; }
+        IPendingProviderVerificationRepository PendingProviderVerification { get; }
+        IProviderServiceAvailabilityRepository ProviderServiceAvailability { get; }
+        IProviderSubServicesRepository ProviderSubServices { get; }
+        IRateRepository Rate { get; }
+        IServiceRepository Service{ get; }
+        ISubServiceRepositry SubService { get; }
+        ITaskAssignmentRepository TaskAssignment { get; }
+        ITaskBidRepository TaskBid { get; }
+        IUserRepository User { get; }
+        IDisputeRepository Dispute { get; } 
+        ISubscriptionRepository Subscription { get; } 
         public Task Commit();
     }
 }
+    

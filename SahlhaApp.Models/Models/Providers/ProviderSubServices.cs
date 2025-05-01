@@ -1,10 +1,11 @@
-﻿using System;
+﻿using SahlhaApp.Models.Models.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SahlhaApp.Models.Models
+namespace SahlhaApp.Models.Models.Providers
 {
     public class ProviderSubServices
     {

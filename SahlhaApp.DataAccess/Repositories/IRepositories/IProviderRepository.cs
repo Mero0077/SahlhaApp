@@ -1,4 +1,4 @@
-﻿using SahlhaApp.Models.Models;
+﻿using SahlhaApp.Models.Models.Providers;
 using System;
 using System.Collections.Generic;
 using System.Linq;

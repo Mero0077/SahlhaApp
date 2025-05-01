@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using SahlhaApp.Models.Models.Payments;
+using SahlhaApp.Models.Models.Providers;
 using Stripe;
 
 namespace SahlhaApp.Models.Models
@@ -29,11 +31,12 @@ namespace SahlhaApp.Models.Models
         public bool? IsProvider { get; set; } = false;
         //Navigation Prop
         public Provider Provider { get; set; }
-        public PendingProviderVerification PendingProviderVerification { get; set; }
-        public ICollection<Job> Tasks { get; set; }
-        public ICollection<Payment> Payments { get; set; }
-        public ICollection<Dispute> Disputes { get; set; }
-        public ICollection<Nofication> Nofications { get; set; }
-        public ICollection<Rate> rates { get; set; }
+        public PendingProviderVerification PendingProviderVerifications { get; set; }
+        public Payment? Payment { get; set; }
+        public ICollection<Task> Tasks { get; set; }
+        public ICollection<Notification> Notifications { get; set; }
+        public ICollection<Dispute> Disputes { get; set; }  
+        public ICollection<Rate> Rates { get; set; }
+        public ICollection<Review> Reviews { get; set; }
     }
 }

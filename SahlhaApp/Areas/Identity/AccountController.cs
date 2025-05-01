@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+//using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using SahlhaApp.Models.Models;
-using SahlhaApp.Utility;
+//using SahlhaApp.Models.Models;
+//using SahlhaApp.Utility;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
@@ -11,6 +11,8 @@ using System.Text;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using SahlhaApp.Models.DTOs.Request;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using SahlhaApp.Models.DTOs.Request.PasswordRequests;
+using SahlhaApp.Models.DTOs.Request.RegisterRequest;
 
 namespace SahlhaApp.Areas.Identity
 {

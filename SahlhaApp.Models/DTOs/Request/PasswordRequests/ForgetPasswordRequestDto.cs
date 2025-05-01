@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SahlhaApp.Models.DTOs.Request
+namespace SahlhaApp.Models.DTOs.Request.PasswordRequests
 {
-    public class VerifyOtpRequestDto
+    public class ForgetPasswordRequestDto
     {
         public string Email { get; set; }
-        public int Otp { get; set; }
     }
 }

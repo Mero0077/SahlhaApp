@@ -1,6 +1,6 @@
 ﻿using SahlhaApp.DataAccess.Data;
 using SahlhaApp.DataAccess.Repositories.IRepositories;
-using SahlhaApp.Models.Models;
+using SahlhaApp.Models.Models.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Linq;

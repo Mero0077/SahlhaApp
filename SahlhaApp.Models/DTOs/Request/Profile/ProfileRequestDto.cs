@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SahlhaApp.Models.DTOs.Request
+namespace SahlhaApp.Models.DTOs.Request.Profile
 {
     public class ProfileRequestDto
     {

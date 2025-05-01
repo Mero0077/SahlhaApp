@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using SahlhaApp.DataAccess.Repositories.IRepositories;
-using SahlhaApp.Models.DTOs.Request;
-using SahlhaApp.Models.Models;
+
+//using SahlhaApp.DataAccess.Repositories.IRepositories;
+using SahlhaApp.Models.DTOs.Request.PasswordRequests;
+using SahlhaApp.Models.DTOs.Request.Profile;
+
 
 namespace SahlhaApp.Areas.Identity
 {
@@ -12,14 +13,14 @@ namespace SahlhaApp.Areas.Identity
     public class ProfileController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IUserRepository _userRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         private readonly string FilePath = "D:\\.net diplom\\Angular\\SahetyAPI\\assets\\img";
 
-        public ProfileController(UserManager<ApplicationUser> userManager, IUserRepository userRepository)
+        public ProfileController(UserManager<ApplicationUser> userManager, IUnitOfWork unitOfWork)
         {
             this._userManager = userManager;
-            this._userRepository = userRepository;
+           _unitOfWork = unitOfWork;
         }
 
         [HttpPost("Profile")]
@@ -28,7 +29,7 @@ namespace SahlhaApp.Areas.Identity
             var user = await _userManager.FindByNameAsync(profileRequestDto.UserName);
             if (user is null) return Unauthorized();
 
-            var userAccount = await _userRepository.GetUserWithRolesByIdAsync(user.UserName);
+            var userAccount = await _unitOfWork.User.GetUserWithRolesByIdAsync(user.UserName);
             return Ok(userAccount);
         }
 

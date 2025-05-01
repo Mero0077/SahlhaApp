@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SahlhaApp.DataAccess.Data;
 using SahlhaApp.DataAccess.Repositories.IRepositories;
-using SahlhaApp.Models.DTOs.Response;
+using SahlhaApp.Models.DTOs.Response.ProfileResponse;
 using SahlhaApp.Models.Models;
 using System;
 using System.Collections.Generic;
