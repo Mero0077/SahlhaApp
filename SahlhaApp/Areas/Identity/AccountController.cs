@@ -10,6 +10,7 @@ using System.Text.Encodings.Web;
 using System.Text;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using SahlhaApp.Models.DTOs.Request;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace SahlhaApp.Areas.Identity
 {
@@ -45,10 +46,11 @@ namespace SahlhaApp.Areas.Identity
             };
 
             var result = await _userManager.CreateAsync(user, registerRequesrDto.Password);
-            await _userManager.AddToRoleAsync(user, "User");
+          
 
             if (result.Succeeded)
             {
+                await _userManager.AddToRoleAsync(user, "User");
                 // Corrected userId assignment
                 var userId = user.Id;
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -87,27 +89,50 @@ namespace SahlhaApp.Areas.Identity
         public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto)
         {
             var user = await _userManager.FindByEmailAsync(loginRequestDto.Email);
-            if (user == null) return NotFound(new { Message = "User not found" });
 
-            if (user.Email != loginRequestDto.Email || !await _userManager.CheckPasswordAsync(user, loginRequestDto.Password)) return Unauthorized(new { Message = "Invalid email or password" });
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var tokenDescriptor = new SecurityTokenDescriptor
+            if (user != null)
             {
-                Issuer = _jwtOptions.Issuer,
-                Audience = _jwtOptions.Audience,
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SigninKey)),
-                SecurityAlgorithms.HmacSha256),
-                Subject = new ClaimsIdentity(new Claim[]
+                bool Found = await _userManager.CheckPasswordAsync(user, loginRequestDto.Password);
+                if (Found)
                 {
-                    new (ClaimTypes.NameIdentifier, loginRequestDto.Email),
-                    new (ClaimTypes.Email, loginRequestDto.Email)
-                }),
-            };
-            var securityToken = tokenHandler.CreateToken(tokenDescriptor);
-            var accesstoken = tokenHandler.WriteToken(securityToken);
+                    List<Claim> UserClaims = new List<Claim>();
+                    //Token genereated Id change
+                    UserClaims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
+                    UserClaims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id));
+                    UserClaims.Add(new Claim(ClaimTypes.Email, user.Email));
+                    UserClaims.Add(new Claim(ClaimTypes.Name, user.UserName));
+                    var UserRoles = await _userManager.GetRolesAsync(user);
 
-            return Ok(accesstoken);
+
+                    foreach (var RoleName in UserRoles)
+                    {
+                        UserClaims.Add(new Claim(ClaimTypes.Role, RoleName));
+                    }
+
+                    SymmetricSecurityKey symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SigninKey));
+                    SigningCredentials signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
+
+                    //Token design
+                    JwtSecurityToken Token = new JwtSecurityToken(
+                        audience: _jwtOptions.Audience,
+                        issuer: _jwtOptions.Issuer,
+                        expires: DateTime.Now.AddMinutes(_jwtOptions.Lifetime),
+                        claims: UserClaims, // all those are claims
+                        signingCredentials: signingCredentials);
+
+                    // generate token response
+
+                    return Ok(new
+                    {
+                        FinalToken = new JwtSecurityTokenHandler().WriteToken(Token),
+                        Expiry = Token.ValidTo
+                    });
+                }
+                ModelStateDictionary keyValuePairs = new ModelStateDictionary();
+                keyValuePairs.AddModelError("Error", "Invalid Credentials");
+                return BadRequest(keyValuePairs);
+            }
+            return NotFound();
         }
 
         [HttpPost("Logout")]
