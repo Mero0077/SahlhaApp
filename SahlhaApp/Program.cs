@@ -52,6 +52,8 @@ builder.Services.AddAuthentication(options =>
 // Repositories
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+builder.Services.AddHttpClient();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

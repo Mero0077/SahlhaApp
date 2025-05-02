@@ -23,8 +23,8 @@ namespace SahlhaApp.Models.Models
         public DateTime? CreatedAt { get; set; } = DateTime.Now;
         public DateTime? UpdatedAt { get; set; } = DateTime.Now;
         public bool? Gender { get; set; } = false;
-        public decimal? LocationLatitude { get; set; }
-        public decimal? LocationLongitude { get; set; }
+        public double? LocationLatitude { get; set; }
+        public double? LocationLongitude { get; set; }
         //Provider Status
         public bool? IsProvider { get; set; } = false;
         //Navigation Prop

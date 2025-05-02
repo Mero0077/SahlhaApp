@@ -9,6 +9,8 @@ namespace SahlhaApp.Models.DTOs.Request.RegisterRequest
 {
     public class RegisterRequesrDto
     {
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
         [Required]
         public string UserName { get; set; }
 
