@@ -79,15 +79,6 @@ namespace SahlhaApp.Areas.Identity.Controllers
             return BadRequest(ModelState);
         }
 
-
-
-
-        private string GetClientIp(HttpContext context)
-        {
-            var ip = context.Request.Headers["X-Forwarded-For"].FirstOrDefault();
-            return string.IsNullOrEmpty(ip) ? context.Connection.RemoteIpAddress?.ToString() : ip;
-        }
-
         private async Task<IpLocationResponse?> GetLocationFromIpAsync(string ip)
         {
             var response = await _httpClient.GetAsync($"http://ip-api.com/json/{ip}");
