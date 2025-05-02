@@ -12,7 +12,7 @@ namespace SahlhaApp.Models.Models
         public bool IsAccepted { get; set; } = false;
         public decimal FinalPrice { get; set; }
         public DateTime AssignedAt { get; set; } = DateTime.Now;
-
+        public bool IsCompleted { get; set; } = false;
         public int JobId { get; set; }
         public Job Job { get; set; }
 

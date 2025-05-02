@@ -12,8 +12,8 @@ using SahlhaApp.DataAccess.Data;
 namespace SahlhaApp.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250430110759_Payment")]
-    partial class Payment
+    [Migration("20250502090713_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -210,11 +210,11 @@ namespace SahlhaApp.DataAccess.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal?>("LocationLatitude")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double?>("LocationLatitude")
+                        .HasColumnType("float");
 
-                    b.Property<decimal?>("LocationLongitude")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double?>("LocationLongitude")
+                        .HasColumnType("float");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -269,6 +269,48 @@ namespace SahlhaApp.DataAccess.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("SahlhaApp.Models.Models.Dispute", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ResolvedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("TaskAssignmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("TaskAssignmentId")
+                        .IsUnique();
+
+                    b.ToTable("Disputes");
                 });
 
             modelBuilder.Entity("SahlhaApp.Models.Models.Document", b =>
@@ -354,7 +396,7 @@ namespace SahlhaApp.DataAccess.Migrations
                     b.Property<decimal>("Duration")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("taskStatus")
+                    b.Property<int>("JobStatus")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -362,6 +404,42 @@ namespace SahlhaApp.DataAccess.Migrations
                     b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Jobs");
+                });
+
+            modelBuilder.Entity("SahlhaApp.Models.Models.Notification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("SentAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.ToTable("Nofications");
                 });
 
             modelBuilder.Entity("SahlhaApp.Models.Models.Payment", b =>
@@ -389,6 +467,9 @@ namespace SahlhaApp.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ProviderId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -404,6 +485,8 @@ namespace SahlhaApp.DataAccess.Migrations
                     b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("PaymentMethodId");
+
+                    b.HasIndex("ProviderId");
 
                     b.HasIndex("TaskAssignmentId")
                         .IsUnique();
@@ -542,6 +625,44 @@ namespace SahlhaApp.DataAccess.Migrations
                     b.ToTable("ProviderSubServices");
                 });
 
+            modelBuilder.Entity("SahlhaApp.Models.Models.Rate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ApplicationUserId1")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ProviderId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RateValue")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("ApplicationUserId1");
+
+                    b.HasIndex("ProviderId");
+
+                    b.ToTable("Rates");
+                });
+
             modelBuilder.Entity("SahlhaApp.Models.Models.Service", b =>
                 {
                     b.Property<int>("Id")
@@ -649,6 +770,9 @@ namespace SahlhaApp.DataAccess.Migrations
                     b.Property<bool>("IsAccepted")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
+
                     b.Property<int>("JobId")
                         .HasColumnType("int");
 
@@ -683,6 +807,9 @@ namespace SahlhaApp.DataAccess.Migrations
 
                     b.Property<int>("Duration")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsAccepted")
+                        .HasColumnType("bit");
 
                     b.Property<int>("JobId")
                         .HasColumnType("int");
@@ -750,6 +877,25 @@ namespace SahlhaApp.DataAccess.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("SahlhaApp.Models.Models.Dispute", b =>
+                {
+                    b.HasOne("SahlhaApp.Models.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany("Disputes")
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SahlhaApp.Models.Models.TaskAssignment", "TaskAssignment")
+                        .WithOne("Dispute")
+                        .HasForeignKey("SahlhaApp.Models.Models.Dispute", "TaskAssignmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("TaskAssignment");
+                });
+
             modelBuilder.Entity("SahlhaApp.Models.Models.Document", b =>
                 {
                     b.HasOne("SahlhaApp.Models.Models.DocumentType", "DocumentType")
@@ -780,6 +926,17 @@ namespace SahlhaApp.DataAccess.Migrations
                     b.Navigation("ApplicationUser");
                 });
 
+            modelBuilder.Entity("SahlhaApp.Models.Models.Notification", b =>
+                {
+                    b.HasOne("SahlhaApp.Models.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany("Nofications")
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+                });
+
             modelBuilder.Entity("SahlhaApp.Models.Models.Payment", b =>
                 {
                     b.HasOne("SahlhaApp.Models.Models.ApplicationUser", "ApplicationUser")
@@ -793,6 +950,10 @@ namespace SahlhaApp.DataAccess.Migrations
                         .HasForeignKey("PaymentMethodId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("SahlhaApp.Models.Models.Provider", null)
+                        .WithMany("Payments")
+                        .HasForeignKey("ProviderId");
 
                     b.HasOne("SahlhaApp.Models.Models.TaskAssignment", "TaskAssignment")
                         .WithOne("Payment")
@@ -859,6 +1020,29 @@ namespace SahlhaApp.DataAccess.Migrations
                     b.Navigation("SubService");
                 });
 
+            modelBuilder.Entity("SahlhaApp.Models.Models.Rate", b =>
+                {
+                    b.HasOne("SahlhaApp.Models.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SahlhaApp.Models.Models.ApplicationUser", null)
+                        .WithMany("rates")
+                        .HasForeignKey("ApplicationUserId1");
+
+                    b.HasOne("SahlhaApp.Models.Models.Provider", "Provider")
+                        .WithMany("Rates")
+                        .HasForeignKey("ProviderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Provider");
+                });
+
             modelBuilder.Entity("SahlhaApp.Models.Models.SubService", b =>
                 {
                     b.HasOne("SahlhaApp.Models.Models.Service", "Service")
@@ -921,6 +1105,10 @@ namespace SahlhaApp.DataAccess.Migrations
 
             modelBuilder.Entity("SahlhaApp.Models.Models.ApplicationUser", b =>
                 {
+                    b.Navigation("Disputes");
+
+                    b.Navigation("Nofications");
+
                     b.Navigation("Payments");
 
                     b.Navigation("PendingProviderVerification")
@@ -930,6 +1118,8 @@ namespace SahlhaApp.DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("Tasks");
+
+                    b.Navigation("rates");
                 });
 
             modelBuilder.Entity("SahlhaApp.Models.Models.DocumentType", b =>
@@ -951,9 +1141,13 @@ namespace SahlhaApp.DataAccess.Migrations
                 {
                     b.Navigation("Documents");
 
+                    b.Navigation("Payments");
+
                     b.Navigation("ProviderServiceAvailability");
 
                     b.Navigation("ProviderServices");
+
+                    b.Navigation("Rates");
 
                     b.Navigation("Subscription");
 
@@ -974,6 +1168,9 @@ namespace SahlhaApp.DataAccess.Migrations
 
             modelBuilder.Entity("SahlhaApp.Models.Models.TaskAssignment", b =>
                 {
+                    b.Navigation("Dispute")
+                        .IsRequired();
+
                     b.Navigation("Payment")
                         .IsRequired();
                 });

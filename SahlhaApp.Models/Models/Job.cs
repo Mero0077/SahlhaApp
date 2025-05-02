@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SahlhaApp.Models.Models
 {
-    public enum TaskStatus
+    public enum JobStatus
     {
         Pending,
         InProgress,
@@ -20,7 +20,7 @@ namespace SahlhaApp.Models.Models
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public string Address { get; set; }
         public decimal Duration { get; set; }
-        public TaskStatus taskStatus { get; set; } = TaskStatus.Pending;
+        public JobStatus JobStatus { get; set; } = JobStatus.Pending;
 
         public string ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }

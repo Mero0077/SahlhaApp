@@ -207,11 +207,11 @@ namespace SahlhaApp.DataAccess.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal?>("LocationLatitude")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double?>("LocationLatitude")
+                        .HasColumnType("float");
 
-                    b.Property<decimal?>("LocationLongitude")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double?>("LocationLongitude")
+                        .HasColumnType("float");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -393,7 +393,7 @@ namespace SahlhaApp.DataAccess.Migrations
                     b.Property<decimal>("Duration")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("taskStatus")
+                    b.Property<int>("JobStatus")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -403,7 +403,7 @@ namespace SahlhaApp.DataAccess.Migrations
                     b.ToTable("Jobs");
                 });
 
-            modelBuilder.Entity("SahlhaApp.Models.Models.Nofication", b =>
+            modelBuilder.Entity("SahlhaApp.Models.Models.Notification", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -767,6 +767,9 @@ namespace SahlhaApp.DataAccess.Migrations
                     b.Property<bool>("IsAccepted")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
+
                     b.Property<int>("JobId")
                         .HasColumnType("int");
 
@@ -801,6 +804,9 @@ namespace SahlhaApp.DataAccess.Migrations
 
                     b.Property<int>("Duration")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsAccepted")
+                        .HasColumnType("bit");
 
                     b.Property<int>("JobId")
                         .HasColumnType("int");
@@ -917,7 +923,7 @@ namespace SahlhaApp.DataAccess.Migrations
                     b.Navigation("ApplicationUser");
                 });
 
-            modelBuilder.Entity("SahlhaApp.Models.Models.Nofication", b =>
+            modelBuilder.Entity("SahlhaApp.Models.Models.Notification", b =>
                 {
                     b.HasOne("SahlhaApp.Models.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Nofications")
