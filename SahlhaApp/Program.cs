@@ -9,6 +9,7 @@ using SahlhaApp.Models.Models;
 using SahlhaApp.Utility;
 using Scalar.AspNetCore;
 using Stripe;
+using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -45,14 +46,15 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = jwtoptions.Issuer,
         ValidateAudience = true,
         ValidAudience = jwtoptions.Audience,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtoptions.SigninKey))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtoptions.SigninKey)),
+        NameClaimType = "nameid"
     };
 });
 
 // Repositories
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-builder.Services.AddHttpClient();
+//builder.Services.AddHttpClient();
 
 var app = builder.Build();
 

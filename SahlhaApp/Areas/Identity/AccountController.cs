@@ -19,6 +19,7 @@ using SahlhaApp.Models.DTOs.Request.RegisterRequest;
 using SahlhaApp.Models.DTOs.Request.Profile;
 using System.Text.Json;
 using SahlhaApp.Models.DTOs.Response.Location;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SahlhaApp.Areas.Identity.Controllers
 {
@@ -31,19 +32,21 @@ namespace SahlhaApp.Areas.Identity.Controllers
         private readonly IConfiguration _configuration;
         private readonly JwtOptions _jwtOptions;
         private readonly HttpClient _httpClient;
+        private readonly IUnitOfWork _unitOfWork;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
             IConfiguration configuration,
             JwtOptions options,
-            HttpClient httpClient)
+            HttpClient httpClient, SignInManager<ApplicationUser> signInManager, IUnitOfWork unitOfWork)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
             _jwtOptions = options;
             _httpClient = httpClient;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpPost("Register")]
@@ -79,6 +82,7 @@ namespace SahlhaApp.Areas.Identity.Controllers
             return BadRequest(ModelState);
         }
 
+
         private async Task<IpLocationResponse?> GetLocationFromIpAsync(string ip)
         {
             var response = await _httpClient.GetAsync($"http://ip-api.com/json/{ip}");
@@ -96,7 +100,7 @@ namespace SahlhaApp.Areas.Identity.Controllers
         }
 
 
-
+        [HttpPost("ConfirmEmail")]
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
         {
             var user = await _userManager.FindByIdAsync(userId);
@@ -126,8 +130,9 @@ namespace SahlhaApp.Areas.Identity.Controllers
                     SecurityAlgorithms.HmacSha256),
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.NameIdentifier, loginRequestDto.Email),
-                    new Claim(ClaimTypes.Email, loginRequestDto.Email)
+                    new Claim(ClaimTypes.NameIdentifier, user.Id),
+                    new Claim(ClaimTypes.Email, loginRequestDto.Email),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 }),
             };
             var securityToken = tokenHandler.CreateToken(tokenDescriptor);
@@ -136,11 +141,12 @@ namespace SahlhaApp.Areas.Identity.Controllers
             return Ok(accessToken);
         }
 
-        [HttpPost("Logout")]
-        public IActionResult Logout()
-        {
-            return Ok(new { Message = "User logged out successfully." });
-        }
+        //[HttpPost("Logout")]
+        //public async Task<IActionResult> LogoutAsync()
+        //{
+        //    await _signInManager.SignOutAsync();
+        //    return Ok(new { Message = "User logged out successfully." });
+        //}
 
         [HttpPost("ForgetPassword")]
         public async Task<IActionResult> ForgetPassword([FromBody] ForgetPasswordRequestDto forgetPasswordRequestDto)
@@ -181,11 +187,12 @@ namespace SahlhaApp.Areas.Identity.Controllers
             return BadRequest(new { Message = "Invalid OTP" });
         }
 
+        
         [HttpPost("ResetPassword")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequestDto resetPasswordRequestDto)
         {
-            if (resetPasswordRequestDto.NewPassword != resetPasswordRequestDto.ConfirmPassword)
-                return BadRequest(new { Message = "Passwords do not match" });
+            //if (resetPasswordRequestDto.NewPassword != resetPasswordRequestDto.ConfirmPassword)
+            //    return BadRequest(new { Message = "Passwords do not match" });
 
             var user = await _userManager.FindByEmailAsync(resetPasswordRequestDto.Email);
             if (user == null)

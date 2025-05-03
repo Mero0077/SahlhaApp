@@ -20,5 +20,10 @@ namespace SahlhaApp.Models.DTOs.Request.RegisterRequest
 
         [Required]
         public string Password { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        [Compare(nameof(Password))]
+        public string ConfirmPassword { get; set; } = string.Empty;
     }
 }

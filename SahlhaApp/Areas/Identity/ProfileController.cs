@@ -138,7 +138,7 @@ namespace SahlhaApp.Areas.Identity
         [HttpPost("UpdatePassword")]
         public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordRequestDto updatePasswordRequestDto)
         {
-            var user = await _userManager.FindByNameAsync(updatePasswordRequestDto.UserName);
+            var user = await _userManager.FindByEmailAsync(updatePasswordRequestDto.Email);
             if (user is null) return NotFound();
 
             var result = await _userManager.ChangePasswordAsync(user, updatePasswordRequestDto.OldPassword, updatePasswordRequestDto.NewPassword);
