@@ -21,6 +21,7 @@ namespace SahlhaApp.DataAccess.Data
         public DbSet<Document> Documents { get; set; }
         public DbSet<DocumentType> DocumentTypes { get; set; }
         public DbSet<Job> Jobs { get; set; }
+        public DbSet<ScheduledTask> ScheduledTasks { get; set; }
         public DbSet<TaskBid> TaskBids { get; set; }
         public DbSet<TaskAssignment> TaskAssignments { get; set; }
         public DbSet<PaymentMethod> PaymentMethods { get; set; }
@@ -57,13 +58,16 @@ namespace SahlhaApp.DataAccess.Data
                 .HasOne(r => r.Provider)
                 .WithMany(p => p.Rates)
                 .HasForeignKey(r => r.ProviderId)
-                .OnDelete(DeleteBehavior.Restrict); // يمنع الحذف التلقائي
+                .OnDelete(DeleteBehavior.Restrict); 
 
             modelBuilder.Entity<Rate>()
                 .HasOne(r => r.ApplicationUser)
                 .WithMany()
                 .HasForeignKey(r => r.ApplicationUserId)
-                .OnDelete(DeleteBehavior.Cascade); // مسموح لأن مساره غالباً آمن
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Job>().ToTable("Jobs");
+            modelBuilder.Entity<ScheduledTask>().ToTable("ScheduledTasks");
         }
 
 

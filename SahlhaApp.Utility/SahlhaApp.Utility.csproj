@@ -25,4 +25,9 @@
     <Folder Include="Validations\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SahlhaApp.DataAccess\SahlhaApp.DataAccess.csproj" />
+    <ProjectReference Include="..\SahlhaApp.Models\SahlhaApp.Models.csproj" />
+  </ItemGroup>
+
 </Project>

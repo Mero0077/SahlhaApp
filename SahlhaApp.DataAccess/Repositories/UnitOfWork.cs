@@ -29,6 +29,7 @@ namespace SahlhaApp.DataAccess.Repositories
         public ITaskAssignmentRepository TaskAssignment{ get; private set; }
         public ITaskBidRepository TaskBid{ get; private set; }
         public IUserRepository User{ get; private set; }
+        public IScheduledTask ScheduledTask{ get; private set; }
         public UnitOfWork(ApplicationDbContext dbContext)
         {
             _context = dbContext;
@@ -50,6 +51,7 @@ namespace SahlhaApp.DataAccess.Repositories
             TaskAssignment= new TaskAssignmentRepository(dbContext);
             TaskBid= new TaskBidRepository(dbContext);
             User= new UserRepository(dbContext);
+            ScheduledTask= new ScheduledTaskRepository(dbContext);
         }
 
         public async Task Commit()

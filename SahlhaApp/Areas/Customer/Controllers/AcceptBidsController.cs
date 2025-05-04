@@ -23,9 +23,14 @@ namespace SahlhaApp.Areas.Customer.Controllers
         {
             //var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
+
             var bid = await _unitOfWork.TaskBid.GetOne(e => e.Id == acceptProviderRequest.TaskBidId, includes: [e => e.Job]);
 
             if (bid == null) return NotFound("Bid not found.");
+
+            var TaskStatus = await _unitOfWork.Job.GetOne(e => e.Id == bid.JobId && e.ApplicationUserId == acceptProviderRequest.ApplicationUserId);
+
+            if (TaskStatus.JobStatus == JobStatus.Cancelled) return BadRequest("Task is cancelled");
 
             if (bid.Job.ApplicationUserId != acceptProviderRequest.ApplicationUserId) return Unauthorized("You don't own this job.");
 

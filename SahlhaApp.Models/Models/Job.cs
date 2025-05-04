@@ -22,6 +22,7 @@ namespace SahlhaApp.Models.Models
         public decimal Duration { get; set; }
         public JobStatus JobStatus { get; set; } = JobStatus.Pending;
 
+        public DateTime? CancelledAt { get; set; }
         public string ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
 

@@ -30,7 +30,7 @@ namespace SahlhaApp.Models.Models
         //Navigation Prop
         public Provider Provider { get; set; }
         public PendingProviderVerification PendingProviderVerification { get; set; }
-        public ICollection<Job> Tasks { get; set; }
+        public ICollection<Job> Jobs { get; set; }
         public ICollection<Payment> Payments { get; set; }
         public ICollection<Dispute> Disputes { get; set; }
         public ICollection<Notification> Nofications { get; set; }
