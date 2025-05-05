@@ -18,7 +18,7 @@ namespace SahlhaApp.Areas.Shared.Controllers
         }
 
 
-        [HttpPost()]
+        [HttpPost("PostDispute")]
         public async Task<IActionResult> PostDispute([FromBody] DisputeRequestDto disputeRequestDto)
         {
             string? UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);

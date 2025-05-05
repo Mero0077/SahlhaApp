@@ -9,27 +9,39 @@ namespace SahlhaApp.Utility
 {
     public class DocumentHelper
     {
-        public static async Task<string> HandleImages(IFormFile ImageFile, string OldImageFileName = null)
+        private static string FilePath = "D:\\MagdyNudes";
+
+        public static async Task<string> HandleImages(IFormFile imageFile, string oldImageFileName = null)
         {
-            if (ImageFile == null || ImageFile.Length == 0) return null;
+            if (imageFile == null || imageFile.Length == 0)
+                throw new ArgumentException("Image file is empty.");
 
-            var imagesFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
-            var fileName = Guid.NewGuid() + Path.GetExtension(ImageFile.FileName);
-            var filePath = Path.Combine(imagesFolder, fileName);
+            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".webp" };
+            var extension = Path.GetExtension(imageFile.FileName).ToLower();
 
-            // Delete old image
-            if (!string.IsNullOrEmpty(OldImageFileName))
+            if (!allowedExtensions.Contains(extension))
+                throw new InvalidOperationException("Unsupported file format.");
+
+            if (imageFile.Length > 2 * 1024 * 1024)
+                throw new InvalidOperationException("File size exceeds 2MB limit.");
+
+            Directory.CreateDirectory(FilePath);
+
+            var fileName = Guid.NewGuid() + extension;
+            var filePath = Path.Combine(FilePath, fileName);
+
+            // Delete old image if exists
+            if (!string.IsNullOrWhiteSpace(oldImageFileName))
             {
-
-                var oldImagePath = Path.Combine(imagesFolder, OldImageFileName);
-                if (System.IO.File.Exists(oldImagePath)) System.IO.File.Delete(oldImagePath);
+                var oldPath = Path.Combine(FilePath, oldImageFileName);
+                if (File.Exists(oldPath))
+                    File.Delete(oldPath);
             }
 
             using var stream = new FileStream(filePath, FileMode.Create);
-            await ImageFile.CopyToAsync(stream);
+            await imageFile.CopyToAsync(stream);
 
-            return fileName;
-
+            return fileName; 
         }
     }
 }

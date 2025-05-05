@@ -55,52 +55,43 @@ namespace SahlhaApp.Areas.Identity.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var user = registerRequesrDto.Adapt<ApplicationUser>();
-            var userIP = HttpContext.Connection.RemoteIpAddress?.ToString();
-            var location = await GetLocationFromIpAsync(userIP);
 
-            if (location != null)
-            {
-                user.LocationLatitude = location.Latitude;
-                user.LocationLongitude = location.Longitude;
-            }
 
             var result = await _userManager.CreateAsync(user, registerRequesrDto.Password);
 
-            await _userManager.AddToRoleAsync(user, "User");
-
-            if (result.Succeeded)
+            if (!result.Succeeded)
             {
-                Console.WriteLine($"User IP: {userIP}");
-                Console.WriteLine($"Location info: {location?.Latitude}, {location?.Longitude}");
-
-                return Ok(new { Message = "User registered successfully", IP = userIP, Location = location });
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+                return BadRequest(ModelState);
             }
 
-            foreach (var error in result.Errors)
-                ModelState.AddModelError(string.Empty, error.Description);
+            await _userManager.AddToRoleAsync(user, "User");
 
-            return BadRequest(ModelState);
+            return Ok(new { message = "Registration successful!" });
+
         }
 
+            //private async Task<IpLocationResponse?> GetLocationFromIpAsync(string ip)
+            //{
+            //    var response = await _httpClient.GetAsync($"http://ip-api.com/json/{ip}");
+            //    if (!response.IsSuccessStatusCode) return null;
 
-        private async Task<IpLocationResponse?> GetLocationFromIpAsync(string ip)
-        {
-            var response = await _httpClient.GetAsync($"http://ip-api.com/json/{ip}");
-            if (!response.IsSuccessStatusCode) return null;
+            //    var json = await response.Content.ReadAsStringAsync();
+            //    var location = JsonSerializer.Deserialize<IpLocationResponse>(json, new JsonSerializerOptions
+            //    {
+            //        PropertyNameCaseInsensitive = true
+            //    });
 
-            var json = await response.Content.ReadAsStringAsync();
-            var location = JsonSerializer.Deserialize<IpLocationResponse>(json, new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
+            //    if (location?.Status != "success") return null;
 
-            if (location?.Status != "success") return null;
-
-            return location;
-        }
+            //    return location;
+            //}
 
 
-        [HttpPost("ConfirmEmail")]
+            [HttpPost("ConfirmEmail")]
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
         {
             var user = await _userManager.FindByIdAsync(userId);

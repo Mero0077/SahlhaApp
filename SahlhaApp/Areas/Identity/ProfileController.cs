@@ -42,25 +42,28 @@ namespace SahlhaApp.Areas.Identity
         [HttpPost("UpdateProfilePicture")]
         public async Task<IActionResult> UpdateProfilePicture([FromForm] UpdateProfilePictureRequestDto updateProfilePictureRequestDto, CancellationToken cancellationToken)
         {
-            if (updateProfilePictureRequestDto.ImgUrl == null || updateProfilePictureRequestDto.ImgUrl.Length == 0) return BadRequest();
-
             var user = await _userManager.FindByEmailAsync(updateProfilePictureRequestDto.Email);
             if (user == null) return NotFound();
 
-            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(updateProfilePictureRequestDto.ImgUrl.FileName);
-            var filePath = Path.Combine(this.FilePath, fileName);
+         var fileName=  await  DocumentHelper.HandleImages(updateProfilePictureRequestDto.ImgUrl, user.ImgUrl);
 
-            if (!string.IsNullOrEmpty(user.ImgUrl))
-            {
-                var oldPath = Path.Combine(this.FilePath, user.ImgUrl);
-                if (System.IO.File.Exists(oldPath)) System.IO.File.Delete(oldPath);
+            //if (updateProfilePictureRequestDto.ImgUrl == null || updateProfilePictureRequestDto.ImgUrl.Length == 0) return BadRequest();
 
-            }
 
-            using (var stream = System.IO.File.Create(filePath))
-            {
-                await updateProfilePictureRequestDto.ImgUrl.CopyToAsync(stream, cancellationToken);
-            }
+            //var fileName = Guid.NewGuid().ToString() + Path.GetExtension(updateProfilePictureRequestDto.ImgUrl.FileName);
+            //var filePath = Path.Combine(this.FilePath, fileName);
+
+            //if (!string.IsNullOrEmpty(user.ImgUrl))
+            //{
+            //    var oldPath = Path.Combine(this.FilePath, user.ImgUrl);
+            //    if (System.IO.File.Exists(oldPath)) System.IO.File.Delete(oldPath);
+
+            //}
+
+            //using (var stream = System.IO.File.Create(filePath))
+            //{
+            //    await updateProfilePictureRequestDto.ImgUrl.CopyToAsync(stream, cancellationToken);
+            //}
 
             user.ImgUrl = fileName;
             await _userManager.UpdateAsync(user);
