@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SahlhaApp.Models.DTOs.Request;
+using SahlhaApp.Utility.NotifcationService;
 
 namespace SahlhaApp.Areas.Provider.Controllers
 {
@@ -9,15 +10,19 @@ namespace SahlhaApp.Areas.Provider.Controllers
     public class AddBidsController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
-
-        public AddBidsController(IUnitOfWork unitOfWork)
+        private readonly JobPostedNotificationHandler _notificationHandler;
+        private readonly JobService _jobService;
+        public AddBidsController(IUnitOfWork unitOfWork, JobService jobService, JobPostedNotificationHandler jobPostedNotificationHandler)
         {
             _unitOfWork = unitOfWork;
+            _jobService = jobService;
+            _notificationHandler = jobPostedNotificationHandler;
+            _notificationHandler.SubscribeTaskBid(_jobService);
         }
 
 
         [HttpPost("AddBid")]
-        public async Task<IActionResult> AddBidAsync([FromBody] ProviderAddBidRequest providerAddBidRequest)
+        public async Task<IActionResult> AddBid([FromBody] ProviderAddBidRequest providerAddBidRequest)
         {
             var job = await _unitOfWork.Job.GetOne(e => e.Id == providerAddBidRequest.JobId);
             if (job == null)
@@ -42,8 +47,14 @@ namespace SahlhaApp.Areas.Provider.Controllers
                 ProviderId = providerAddBidRequest.ProviderId,
             };
 
-            await _unitOfWork.TaskBid.Add(bid);
-            return Ok(bid);
+            var BidAdded = await _jobService.AddTaskBid(bid);
+
+            var response = new
+            {
+                Message = "Bid successfully added!",
+                Data = BidAdded
+            };
+            return Ok(response);
 
         }
     }

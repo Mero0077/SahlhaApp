@@ -16,13 +16,14 @@ namespace SahlhaApp.Models.DTOs.Request
                 Completed,
                 Cancelled
             }
-
-            public string Description { get; set; }
+             public string? Name { get; set; }
+        public int SubServiceId { get; set; }
+        public string Description { get; set; }
             //public DateTime CreatedAt { get; set; } = DateTime.Now;
             public string ApplicationUserId { get; set; }
             public string Address { get; set; }
             public decimal Duration { get; set; }
-            public JobStatus jobStatus { get; set; } = JobStatus.Pending;
+            public JobStatus? jobStatus { get; set; } = JobStatus.Pending;
 
 
 

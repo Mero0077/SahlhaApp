@@ -16,6 +16,8 @@ namespace SahlhaApp.Models.Models
     public class Job
     {
         public int Id { get; set; }
+        public int SubServiceId { get; set; }
+        public string Name { get; set; }
         public string Description { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public string Address { get; set; }
