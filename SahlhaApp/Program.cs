@@ -52,7 +52,7 @@ builder.Services.AddAuthentication(options =>
 
     options.Events = new JwtBearerEvents
     {
-        OnMessageReceived = context =>
+        OnMessageReceived = context => //This is triggered for every incoming HTTP request where JWT authentication is being used.
         {
             var accessToken = context.Request.Query["access_token"];
             var path = context.HttpContext.Request.Path;
@@ -136,8 +136,9 @@ var app = builder.Build();
 
 
     app.UseCors("AllowAll");
+    app.MapHub<JobHub>("/JobHub");
     app.UseHttpsRedirection();
-
+    
     app.UseAuthentication();
     app.UseAuthorization();
 

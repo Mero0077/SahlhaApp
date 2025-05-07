@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,9 +8,10 @@ using System.Threading.Tasks;
 
 namespace SahlhaApp.Utility.NotifcationService
 {
+    [Authorize]
     public class JobHub: Hub
     {
-        public override async Task OnConnectedAsync()
+        public override async Task OnConnectedAsync() // upon client connecting to our Hub Log or set up session
         {
             var userId = Context.UserIdentifier; // This gets the logged-in user's ID
             Console.WriteLine($"User connected: {userId}");
@@ -25,7 +27,7 @@ namespace SahlhaApp.Utility.NotifcationService
             await base.OnDisconnectedAsync(exception);
         }
 
-        // Optional: Clients can call this to join a group
+        // Optional: Clients can call this to join a group group targeting
         public async Task JoinGroup(string groupName)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
