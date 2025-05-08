@@ -22,9 +22,6 @@ namespace SahlhaApp.Utility
             if (!allowedExtensions.Contains(extension))
                 throw new InvalidOperationException("Unsupported file format.");
 
-            if (imageFile.Length > 2 * 1024 * 1024)
-                throw new InvalidOperationException("File size exceeds 2MB limit.");
-
             Directory.CreateDirectory(FilePath);
 
             var fileName = Guid.NewGuid() + extension;
