@@ -31,7 +31,7 @@ namespace SahlhaApp.Areas.Customer.Controllers
 
             assignment.IsCompleted = true;
             assignment.Job.JobStatus = JobStatus.Completed;
-            //assignment.Job.CompletedAt = DateTime.Now;
+            assignment.Job.CompletedAt = DateTime.Now;
 
             // Calculate and handle duration logic
             var actualDuration = DateTime.Now - assignment.AssignedAt;

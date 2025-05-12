@@ -378,6 +378,9 @@ namespace SahlhaApp.DataAccess.Migrations
                     b.Property<DateTime?>("CancelledAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("CompletedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -385,9 +388,11 @@ namespace SahlhaApp.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal>("Duration")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int>("JobStatus")
                         .HasColumnType("int");
-
 
                     b.Property<double>("Latitude")
                         .HasColumnType("float");
@@ -398,7 +403,6 @@ namespace SahlhaApp.DataAccess.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
 
                     b.Property<int>("SubServiceId")
                         .HasColumnType("int");
@@ -729,6 +733,9 @@ namespace SahlhaApp.DataAccess.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Duration")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<TimeOnly>("EstimatedTime")
                         .HasColumnType("time");

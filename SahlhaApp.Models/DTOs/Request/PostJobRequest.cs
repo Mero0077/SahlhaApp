@@ -26,14 +26,8 @@ namespace SahlhaApp.Models.DTOs.Request
             public decimal Duration { get; set; }
             public JobStatus? jobStatus { get; set; } = JobStatus.Pending;
 
-
-
-
-        }
-        public string Description { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-        public int SubServiceId { get; set; }
     }
 
     }

@@ -18,8 +18,9 @@ namespace SahlhaApp.Areas.Customer.Controllers
         [HttpGet("")]
         public async Task<IActionResult> Services()
         {
+            var subServices= _unitOfWork.SubService.GetAll();
             var services = _unitOfWork.Service
-                .GetAll(e => e.Status == true)
+                .GetAll(e => e.Status == true, includes: [e=>e.SubServices])
                 .ToList()
                 .Adapt<List<ServiceResponseDto>>();
 

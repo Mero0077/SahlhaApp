@@ -96,5 +96,7 @@ namespace SahlhaApp.Areas.Identity
 
             return Ok(new { Message = "Password updated successfully" });
         }
+
+     
     }
 }

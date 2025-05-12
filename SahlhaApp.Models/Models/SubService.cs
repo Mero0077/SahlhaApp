@@ -12,6 +12,8 @@ namespace SahlhaApp.Models.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public bool Status { get; set; } = true;
+        public decimal Duration { get; set; }
+
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public decimal BasePrice { get; set; }
         public TimeOnly EstimatedTime { get; set; }

@@ -46,20 +46,17 @@ namespace SahlhaApp.Areas.Customer.Controllers
                 Latitude = postJobRequest.Latitude,
                 Longitude = postJobRequest.Longitude,
                 CreatedAt = DateTime.UtcNow,
-
-                SubServiceId = postJobRequest.SubServiceId,
                 ApplicationUserId = userId,
                 JobStatus = JobStatus.Pending
             };
 
             await _unitOfWork.Job.Add(job);
 
-            // تحميل اسم SubService
             var subService = await _unitOfWork.SubService.GetOne(s => s.Id == job.SubServiceId);
 
-                Duration = postJobRequest.Duration,
-                ApplicationUserId = postJobRequest.ApplicationUserId
-            }; 
+            //    Duration = postJobRequest.Duration,
+            //    ApplicationUserId = postJobRequest.ApplicationUserId
+            //}; 
             var addedJob = await _jobService.AddJobAsync(job);
 
             var response = new
@@ -69,21 +66,18 @@ namespace SahlhaApp.Areas.Customer.Controllers
             };
 
             return Ok(response);
+            //var jobResponse = new
+            //{
+            //    job.Id,
+            //    job.Description,
+            //    job.Latitude,
+            //    job.Longitude,
+            //    job.CreatedAt,
+            //    job.JobStatus,
+            //    SubServiceName = subService?.Name
+            //};
 
-
-            // تجهيز كائن للعرض
-            var jobResponse = new
-            {
-                job.Id,
-                job.Description,
-                job.Latitude,
-                job.Longitude,
-                job.CreatedAt,
-                job.JobStatus,
-                SubServiceName = subService?.Name
-            };
-
-            return Ok(jobResponse);
+            //return Ok(jobResponse);
         }
 
     }
