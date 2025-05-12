@@ -17,12 +17,10 @@ namespace SahlhaApp.Models.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Url { get; set; }
-        public DateTime VerifiedAt { get; set; }
+        public DateTime? VerifiedAt { get; set; }
         public DateTime UploadedAt { get; set; }
         public Status Status { get; set; } = Status.Pending;
-        public int ProviderId { get; set; }
-        public Provider Provider { get; set; }
-        public int DocumentTypeId { get; set; }
-        public DocumentType DocumentType { get; set; }
+        public string ApplicationUserId { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
     }
 }

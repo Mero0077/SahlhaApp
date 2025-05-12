@@ -22,7 +22,7 @@ namespace SahlhaApp.Areas.Provider.Controllers
             this._unitOfWork = unitOfWork;
         }
 
-        [HttpPost("SelectWorkDays")]
+        [HttpPost("")]
         public async Task<IActionResult> SelectWorkDays(WorkDaysRequestDto workDaysRequestDto)
         {
             if(workDaysRequestDto is null) return BadRequest("WorkDaysRequestDto cannot be null");
@@ -35,17 +35,5 @@ namespace SahlhaApp.Areas.Provider.Controllers
             await _unitOfWork.ProviderServiceAvailability.AddAll(providerWorkDays);
             return Ok();    
         }
-
-        //[HttpPatch("SelectWorkHours")]
-        //public async Task<IActionResult> SelectWorkHours()
-        //{
-
-        //    return Ok();
-        //}
-        //[HttpPost("SelectHourPrice")]
-        //public async Task<IActionResult> SelectHourPrice()
-        //{
-        //    return Ok();
-        //}
     }
 }

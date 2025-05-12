@@ -9,7 +9,6 @@ namespace SahlhaApp.Models.DTOs.Request.PasswordRequests
 {
     public class UpdatePasswordRequestDto
     {
-        public string Email { get; set; }
         public string OldPassword { get; set; }
         public string NewPassword { get; set; }
 

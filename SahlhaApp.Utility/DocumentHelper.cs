@@ -1,47 +1,78 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SahlhaApp.Utility
 {
     public class DocumentHelper
     {
-        private static string FilePath = "D:\\MagdyNudes";
+        private static string FilePath = "C:\\Users\\pc\\Desktop\\Medicio\\Medicio\\assets\\img"; // Change the file path as needed
 
-        public static async Task<string> HandleImages(IFormFile imageFile, string oldImageFileName = null)
+        // Handle a single file upload or update (delete old file if necessary)
+        public static async Task<string> HandleSingleFile(IFormFile file, string oldFileName = null)
         {
-            if (imageFile == null || imageFile.Length == 0)
-                throw new ArgumentException("Image file is empty.");
+            if (file == null || file.Length == 0) throw new ArgumentException("File is empty.");
 
-            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".webp" };
-            var extension = Path.GetExtension(imageFile.FileName).ToLower();
-
-            if (!allowedExtensions.Contains(extension))
-                throw new InvalidOperationException("Unsupported file format.");
-
-            if (imageFile.Length > 2 * 1024 * 1024)
-                throw new InvalidOperationException("File size exceeds 2MB limit.");
-
-            Directory.CreateDirectory(FilePath);
-
-            var fileName = Guid.NewGuid() + extension;
+            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
             var filePath = Path.Combine(FilePath, fileName);
 
             // Delete old image if exists
-            if (!string.IsNullOrWhiteSpace(oldImageFileName))
+            if (!string.IsNullOrWhiteSpace(oldFileName))
             {
-                var oldPath = Path.Combine(FilePath, oldImageFileName);
-                if (File.Exists(oldPath))
-                    File.Delete(oldPath);
+                var oldFilePath = Path.Combine(FilePath, oldFileName);
+                if (File.Exists(oldFilePath)) File.Delete(oldFilePath);
             }
 
-            using var stream = new FileStream(filePath, FileMode.Create);
-            await imageFile.CopyToAsync(stream);
+            using (var stream = File.Create(filePath)) await file.CopyToAsync(stream);
 
-            return fileName; 
+            return fileName;
+        }
+
+        // Handle multiple file uploads
+        public static async Task<List<string>> HandleMultipleFiles(List<IFormFile> files)
+        {
+            if (files == null || !files.Any())
+                throw new ArgumentException("No files uploaded.");
+
+            var fileNames = new List<string>();
+
+            foreach (var file in files)
+            {
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                var filePath = Path.Combine(FilePath, fileName);
+
+                using (var stream = File.Create(filePath))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                fileNames.Add(fileName);
+            }
+
+            return fileNames;
+        }
+
+        // Delete a file if it exists
+        public static void DeleteFile(string fileName)
+        {
+            if (string.IsNullOrWhiteSpace(fileName)) throw new ArgumentException("File name is empty.");
+
+            var filePath = Path.Combine(FilePath, fileName);
+
+            if (File.Exists(filePath)) File.Delete(filePath);
+        }
+
+        // Update a file (delete the old file and upload the new one)
+        public static async Task<string> UpdateFile(IFormFile newFile, string oldFileName)
+        {
+            // Delete the old file first
+            DeleteFile(oldFileName);
+
+            // Now handle the new file upload
+            return await HandleSingleFile(newFile);
         }
     }
 }

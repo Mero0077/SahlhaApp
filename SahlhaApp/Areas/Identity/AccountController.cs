@@ -55,7 +55,8 @@ namespace SahlhaApp.Areas.Identity.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var user = registerRequesrDto.Adapt<ApplicationUser>();
-
+            //registerRequesrDto.UserName = registerRequesrDto.Email;
+            user.UserName = registerRequesrDto.Email;
 
             var result = await _userManager.CreateAsync(user, registerRequesrDto.Password);
 
@@ -74,24 +75,7 @@ namespace SahlhaApp.Areas.Identity.Controllers
 
         }
 
-            //private async Task<IpLocationResponse?> GetLocationFromIpAsync(string ip)
-            //{
-            //    var response = await _httpClient.GetAsync($"http://ip-api.com/json/{ip}");
-            //    if (!response.IsSuccessStatusCode) return null;
-
-            //    var json = await response.Content.ReadAsStringAsync();
-            //    var location = JsonSerializer.Deserialize<IpLocationResponse>(json, new JsonSerializerOptions
-            //    {
-            //        PropertyNameCaseInsensitive = true
-            //    });
-
-            //    if (location?.Status != "success") return null;
-
-            //    return location;
-            //}
-
-
-            [HttpPost("ConfirmEmail")]
+        [HttpPost("ConfirmEmail")]
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
         {
             var user = await _userManager.FindByIdAsync(userId);

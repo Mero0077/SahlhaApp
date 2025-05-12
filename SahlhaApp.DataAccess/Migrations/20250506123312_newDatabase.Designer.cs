@@ -12,8 +12,8 @@ using SahlhaApp.DataAccess.Data;
 namespace SahlhaApp.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250504085953_AddIscanceledToJob")]
-    partial class AddIscanceledToJob
+    [Migration("20250506123312_newDatabase")]
+    partial class newDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -341,7 +341,7 @@ namespace SahlhaApp.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("VerifiedAt")
+                    b.Property<DateTime?>("VerifiedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
