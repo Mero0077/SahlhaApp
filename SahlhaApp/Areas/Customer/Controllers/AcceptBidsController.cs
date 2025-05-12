@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SahlhaApp.Models.DTOs.Request;
+using SahlhaApp.Utility.NotifcationService;
 
 namespace SahlhaApp.Areas.Customer.Controllers
 {
@@ -9,10 +10,15 @@ namespace SahlhaApp.Areas.Customer.Controllers
     public class AcceptBidsController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly JobService _jobService;
+        private readonly JobPostedNotificationHandler _notificationHandler;
 
-        public AcceptBidsController(IUnitOfWork unitOfWork)
+        public AcceptBidsController(IUnitOfWork unitOfWork, JobService jobService, JobPostedNotificationHandler jobPostedNotificationHandler)
         {
             _unitOfWork = unitOfWork;
+            _jobService = jobService;
+            _notificationHandler = jobPostedNotificationHandler;
+            _notificationHandler.Subscribe(_jobService);
         }
 
 

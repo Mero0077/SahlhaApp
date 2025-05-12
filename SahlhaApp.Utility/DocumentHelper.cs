@@ -28,6 +28,7 @@ namespace SahlhaApp.Utility
 
             using (var stream = File.Create(filePath)) await file.CopyToAsync(stream);
 
+
             return fileName;
         }
 
@@ -36,6 +37,8 @@ namespace SahlhaApp.Utility
         {
             if (files == null || !files.Any())
                 throw new ArgumentException("No files uploaded.");
+
+            Directory.CreateDirectory(FilePath);
 
             var fileNames = new List<string>();
 

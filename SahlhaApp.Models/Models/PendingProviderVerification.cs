@@ -16,6 +16,7 @@ namespace SahlhaApp.Models.Models
     {
         public int Id { get; set; }
         public DateTime appliedAt { get; set; } = DateTime.Now;
+        public DateTime? ProcessedAt { get; set; }
         public VerificationStatus VerificationStatus { get; set; } = VerificationStatus.Pending;
         public string? RejectionReason { get; set; }
         public string ApplicationUserId { get; set; }

@@ -73,6 +73,7 @@ namespace SahlhaApp.DataAccess.Repositories
                 query = query.Where(filter);
             }
 
+
             if (includes != null)
             {
                 foreach (var item in includes)
@@ -80,6 +81,9 @@ namespace SahlhaApp.DataAccess.Repositories
                     query = query.Include(item);
                 }
             }
+
+
+
 
             if (!tracked)
             {
