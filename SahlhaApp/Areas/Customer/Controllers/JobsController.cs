@@ -1,14 +1,20 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SahlhaApp.Models.DTOs.Request;
+
+using System.Security.Claims;
+
 using SahlhaApp.Utility.NotifcationService;
 using SahlhaApp.Utility.NotifcationService.NotificationEvents;
 using System.Diagnostics.CodeAnalysis;
+
 
 namespace SahlhaApp.Areas.Customer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class JobsController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -23,18 +29,34 @@ namespace SahlhaApp.Areas.Customer.Controllers
             _notificationHandler.Subscribe(_jobService);
         }
 
-        //[Authorize]
-        [HttpPost("PostJob")]
+        [HttpPost("")]
         public async Task<IActionResult> PostJob([FromBody] PostJobRequest postJobRequest)
         {
-            //var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var job = new Job()
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null || string.IsNullOrEmpty(userIdClaim.Value))
+                return Unauthorized("User ID not found.");
+
+            var userId = userIdClaim.Value;
+
+            var job = new Job
             {
                 Name=postJobRequest.Name,
                 SubServiceId=postJobRequest.SubServiceId,
                 Description = postJobRequest.Description,
-                Address = postJobRequest.Address,
+                Latitude = postJobRequest.Latitude,
+                Longitude = postJobRequest.Longitude,
                 CreatedAt = DateTime.UtcNow,
+
+                SubServiceId = postJobRequest.SubServiceId,
+                ApplicationUserId = userId,
+                JobStatus = JobStatus.Pending
+            };
+
+            await _unitOfWork.Job.Add(job);
+
+            // تحميل اسم SubService
+            var subService = await _unitOfWork.SubService.GetOne(s => s.Id == job.SubServiceId);
+
                 Duration = postJobRequest.Duration,
                 ApplicationUserId = postJobRequest.ApplicationUserId
             }; 
@@ -48,6 +70,21 @@ namespace SahlhaApp.Areas.Customer.Controllers
 
             return Ok(response);
 
+
+            // تجهيز كائن للعرض
+            var jobResponse = new
+            {
+                job.Id,
+                job.Description,
+                job.Latitude,
+                job.Longitude,
+                job.CreatedAt,
+                job.JobStatus,
+                SubServiceName = subService?.Name
+            };
+
+            return Ok(jobResponse);
         }
+
     }
 }

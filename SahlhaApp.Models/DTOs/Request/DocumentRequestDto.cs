@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Http;
+using SahlhaApp.Models.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SahlhaApp.Models.DTOs.Request.Profile
+namespace SahlhaApp.Models.DTOs.Request
 {
-    public class UpdateProfilePictureRequestDto
+    public class DocumentRequestDto
     {
-        public IFormFile ImgUrl { get; set; }
+        public List<IFormFile> File { get; set; }
     }
 }

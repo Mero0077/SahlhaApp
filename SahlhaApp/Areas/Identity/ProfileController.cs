@@ -1,4 +1,6 @@
 ﻿
+using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SahlhaApp.Models.DTOs.Request;
@@ -7,6 +9,7 @@ using SahlhaApp.Models.DTOs.Request;
 //using SahlhaApp.DataAccess.Repositories.IRepositories;
 using SahlhaApp.Models.DTOs.Request.PasswordRequests;
 using SahlhaApp.Models.DTOs.Request.Profile;
+using SahlhaApp.Models.DTOs.Response.ProfileResponse;
 using System.Security.Claims;
 
 
@@ -14,6 +17,7 @@ namespace SahlhaApp.Areas.Identity
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProfileController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -29,64 +33,62 @@ namespace SahlhaApp.Areas.Identity
 
 
 
-        [HttpPost("Profile")]
-        public async Task<IActionResult> Profile([FromBody] ProfileRequestDto profileRequestDto)
+        [HttpGet("Profile")]
+        public async Task<IActionResult> Profile()
         {
-            var user = await _userManager.FindByNameAsync(profileRequestDto.UserName);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _userManager.FindByIdAsync(userId);
             if (user is null) return Unauthorized();
 
-            var userAccount = await _unitOfWork.User.GetUserWithRolesByIdAsync(user.UserName);
-            return Ok(userAccount);
+            var userInfo = user.Adapt<ProfileInfoResponseDto>();
+            var userInProviderRequestes = await _unitOfWork.PendingProviderVerification.GetOne(e => e.ApplicationUserId == userId);
+            if(userInProviderRequestes is not null) userInfo.IsRequested = true;
+
+            return Ok(userInfo);
         }
 
-        [HttpPost("UpdateProfilePicture")]
+        [HttpPut("UpdateProfilePicture")]
         public async Task<IActionResult> UpdateProfilePicture([FromForm] UpdateProfilePictureRequestDto updateProfilePictureRequestDto, CancellationToken cancellationToken)
         {
-            var user = await _userManager.FindByEmailAsync(updateProfilePictureRequestDto.Email);
-            if (user == null) return NotFound();
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+                return Unauthorized();
 
-         var fileName=  await  DocumentHelper.HandleImages(updateProfilePictureRequestDto.ImgUrl, user.ImgUrl);
+            if (updateProfilePictureRequestDto.ImgUrl is null || updateProfilePictureRequestDto.ImgUrl.Length == 0) return BadRequest("No image file was uploaded.");
 
-            //if (updateProfilePictureRequestDto.ImgUrl == null || updateProfilePictureRequestDto.ImgUrl.Length == 0) return BadRequest();
+            var oldPath = user.ImgUrl;
 
-
-            //var fileName = Guid.NewGuid().ToString() + Path.GetExtension(updateProfilePictureRequestDto.ImgUrl.FileName);
-            //var filePath = Path.Combine(this.FilePath, fileName);
-
-            //if (!string.IsNullOrEmpty(user.ImgUrl))
-            //{
-            //    var oldPath = Path.Combine(this.FilePath, user.ImgUrl);
-            //    if (System.IO.File.Exists(oldPath)) System.IO.File.Delete(oldPath);
-
-            //}
-
-            //using (var stream = System.IO.File.Create(filePath))
-            //{
-            //    await updateProfilePictureRequestDto.ImgUrl.CopyToAsync(stream, cancellationToken);
-            //}
+            var fileName = await DocumentHelper.HandleSingleFile(updateProfilePictureRequestDto.ImgUrl, oldPath);
+            if (string.IsNullOrEmpty(fileName)) return StatusCode(500, "Error saving image.");
 
             user.ImgUrl = fileName;
             await _userManager.UpdateAsync(user);
 
-            return Ok(new { Message = "Profile picture updated successfully", ImageUrl = fileName });
+            var imageUrl = $"{Request.Scheme}://{Request.Host}/images/{fileName}";
+            return Ok(new { Message = "Profile picture updated successfully", ImageUrl = imageUrl });
         }
 
-        [HttpPost("UpdateProfile")]
+
+        [HttpPut("UpdateProfile")]
         public async Task<IActionResult> UpdateProfile([FromBody] ProfileRequestDto profileRequestDto)
         {
-            var user = await _userManager.FindByNameAsync(profileRequestDto.UserName);
-            if (user is null) return NotFound();
+            var user = await _userManager.GetUserAsync(User);
+            if (user is null)
+                return NotFound();
 
-            user.UserName = profileRequestDto.UserName;
-            await _userManager.UpdateAsync(user);
+            profileRequestDto.Adapt(user);
+
+            var result = await _userManager.UpdateAsync(user);
+
+            if (!result.Succeeded) return BadRequest(result.Errors);
 
             return Ok(new { Message = "Profile updated successfully" });
         }
 
-        [HttpPost("UpdatePassword")]
+        [HttpPut("UpdatePassword")]
         public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordRequestDto updatePasswordRequestDto)
         {
-            var user = await _userManager.FindByEmailAsync(updatePasswordRequestDto.Email);
+            var user = await _userManager.GetUserAsync(User);
             if (user is null) return NotFound();
 
             var result = await _userManager.ChangePasswordAsync(user, updatePasswordRequestDto.OldPassword, updatePasswordRequestDto.NewPassword);

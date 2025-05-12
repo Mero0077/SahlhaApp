@@ -22,7 +22,6 @@ namespace SahlhaApp.Models.Models
         public ICollection<Subscription> Subscription { get; set; }
         public ICollection<ProviderSubServices> ProviderServices { get; set; }
         public ICollection<ProviderServiceAvailability> ProviderServiceAvailability { get; set; }
-        public ICollection<Document> Documents { get; set; }
         public ICollection<TaskBid> TaskBids { get; set; }
         public ICollection<TaskAssignment> TaskAssignments { get; set; }
         public ICollection<Payment> Payments { get; set; }

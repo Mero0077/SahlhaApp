@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Stripe;
@@ -29,7 +30,9 @@ namespace SahlhaApp.Models.Models
         public bool? IsProvider { get; set; } = false;
         //Navigation Prop
         public Provider Provider { get; set; }
+        public ICollection<Document> Documents { get; set; }
         public PendingProviderVerification PendingProviderVerification { get; set; }
+        [JsonIgnore]
         public ICollection<Job> Jobs { get; set; }
         public ICollection<Payment> Payments { get; set; }
         public ICollection<Dispute> Disputes { get; set; }

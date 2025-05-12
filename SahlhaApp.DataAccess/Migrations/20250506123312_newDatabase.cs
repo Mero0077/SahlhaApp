@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SahlhaApp.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class newDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -226,6 +226,7 @@ namespace SahlhaApp.DataAccess.Migrations
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Duration = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     JobStatus = table.Column<int>(type: "int", nullable: false),
+                    CancelledAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
@@ -336,6 +337,25 @@ namespace SahlhaApp.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ScheduledTasks",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    ScheduledFor = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsRecurring = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ScheduledTasks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ScheduledTasks_Jobs_Id",
+                        column: x => x.Id,
+                        principalTable: "Jobs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Documents",
                 columns: table => new
                 {
@@ -343,7 +363,7 @@ namespace SahlhaApp.DataAccess.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    VerifiedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    VerifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UploadedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     ProviderId = table.Column<int>(type: "int", nullable: false),
@@ -808,6 +828,9 @@ namespace SahlhaApp.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "Rates");
+
+            migrationBuilder.DropTable(
+                name: "ScheduledTasks");
 
             migrationBuilder.DropTable(
                 name: "Subscriptions");

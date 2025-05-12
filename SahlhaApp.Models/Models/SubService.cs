@@ -18,5 +18,6 @@ namespace SahlhaApp.Models.Models
         public int ServiceId { get; set; }
         public Service Service { get; set; }
         public ICollection<ProviderSubServices> ProviderServices { get; set; }
+        public ICollection<Job> Jobs { get; set; } = new List<Job>();
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SahlhaApp.Models.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,12 +9,7 @@ namespace SahlhaApp.Models.DTOs.Request.Provider
 {
     public class ProviderRequestDto
     {
-        public string Description { get; set; }
-        public decimal HourlyRate { get; set; }
-        public TimeOnly StartTime { get; set; }
-        public TimeOnly EndTime { get; set; }
-
-        public string ProviderId { get; set; }
-        public string ApplicationUserId { get; set; }
+        public DateTime appliedAt { get; set; } = DateTime.Now;
+        public string? ApplicationUserId { get; set; }
     }
 }
