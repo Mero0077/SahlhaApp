@@ -29,6 +29,7 @@ namespace SahlhaApp.DataAccess.Data
         public DbSet<Dispute> Disputes { get; set; }
         public DbSet<Notification> Nofications { get; set; }
         public DbSet<Rate> Rates { get; set; }
+        public DbSet<ContactUsMessage> ContactUsMessages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

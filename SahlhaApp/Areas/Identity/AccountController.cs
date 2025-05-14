@@ -49,14 +49,54 @@ namespace SahlhaApp.Areas.Identity.Controllers
             _unitOfWork = unitOfWork;
         }
 
+        private string GenerateToken(ApplicationUser user)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.NameIdentifier, user.Id),
+            new Claim(ClaimTypes.Email, user.Email),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SigninKey));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.UtcNow.AddHours(2),
+                SigningCredentials = creds,
+                Issuer = _jwtOptions.Issuer,
+                Audience = _jwtOptions.Audience
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
+
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequesrDto registerRequesrDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var user = registerRequesrDto.Adapt<ApplicationUser>();
-            //registerRequesrDto.UserName = registerRequesrDto.Email;
-            user.UserName = registerRequesrDto.Email;
+            var existingUser = await _userManager.FindByEmailAsync(registerRequesrDto.Email);
+            if (existingUser != null)
+            {
+                return BadRequest(new { message = "A user with this email already exists." });
+            }
+
+
+            var user = new ApplicationUser()
+            {
+                Email = registerRequesrDto.Email,
+                FirstName = registerRequesrDto.FirstName,
+                LastName = registerRequesrDto.LastName,
+                LocationLatitude = registerRequesrDto.LocationLatitude,
+                LocationLongitude = registerRequesrDto.LocationLongitude,
+                UserName = registerRequesrDto.Email
+            };
 
             var result = await _userManager.CreateAsync(user, registerRequesrDto.Password);
 
@@ -70,8 +110,13 @@ namespace SahlhaApp.Areas.Identity.Controllers
             }
 
             await _userManager.AddToRoleAsync(user, "User");
+            var accessToken = GenerateToken(user);
 
-            return Ok(new { message = "Registration successful!" });
+            return Ok(new
+            {
+                token = accessToken,
+                message = "Registration successful!"
+            });
 
         }
 
@@ -95,24 +140,7 @@ namespace SahlhaApp.Areas.Identity.Controllers
             if (user.Email != loginRequestDto.Email || !await _userManager.CheckPasswordAsync(user, loginRequestDto.Password))
                 return Unauthorized(new { Message = "Invalid email or password" });
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Issuer = _jwtOptions.Issuer,
-                Audience = _jwtOptions.Audience,
-                SigningCredentials = new SigningCredentials(
-                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SigninKey)),
-                    SecurityAlgorithms.HmacSha256),
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(ClaimTypes.NameIdentifier, user.Id),
-                    new Claim(ClaimTypes.Email, loginRequestDto.Email),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                }),
-            };
-            var securityToken = tokenHandler.CreateToken(tokenDescriptor);
-            var accessToken = tokenHandler.WriteToken(securityToken);
-
+            var accessToken= GenerateToken(user);
             return Ok(accessToken);
         }
 

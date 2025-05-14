@@ -12,7 +12,7 @@ namespace SahlhaApp.Utility
 {
     public class EmailService : IEmailSender
     {
-        private readonly string _emailFrom = "mohamedmagdy.182003@gmail.com";
+        private readonly string _emailFrom = "sahlha203@gmail.com";
         private readonly string _emailPassword = "szbs eoff yfwg pghb";
 
         public Task SendEmailAsync(string email, string subject, string message)

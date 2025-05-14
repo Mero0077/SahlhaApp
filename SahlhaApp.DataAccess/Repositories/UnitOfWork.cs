@@ -1,4 +1,5 @@
-﻿using SahlhaApp.DataAccess.Data;
+﻿using Microsoft.AspNetCore.Mvc.Formatters;
+using SahlhaApp.DataAccess.Data;
 using SahlhaApp.DataAccess.Repositories.IRepositories;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,7 @@ namespace SahlhaApp.DataAccess.Repositories
         public ITaskBidRepository TaskBid{ get; private set; }
         public IUserRepository User{ get; private set; }
         public IScheduledTask ScheduledTask{ get; private set; }
+        public IContactUsMessageRepository ContactUsMessage{ get; private set; }
         public UnitOfWork(ApplicationDbContext dbContext)
         {
             _context = dbContext;
@@ -52,6 +54,7 @@ namespace SahlhaApp.DataAccess.Repositories
             TaskBid= new TaskBidRepository(dbContext);
             User= new UserRepository(dbContext);
             ScheduledTask= new ScheduledTaskRepository(dbContext);
+            ContactUsMessage= new ContactUsMessageRepository(dbContext);
         }
 
         public async Task Commit()

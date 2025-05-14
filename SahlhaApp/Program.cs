@@ -9,6 +9,7 @@ using SahlhaApp.Models.Models;
 using SahlhaApp.Utility;
 using SahlhaApp.Utility.NotifcationService;
 using Scalar.AspNetCore;
+using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);

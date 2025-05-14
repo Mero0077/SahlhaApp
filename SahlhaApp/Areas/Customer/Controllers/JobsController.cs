@@ -14,7 +14,7 @@ namespace SahlhaApp.Areas.Customer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class JobsController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -29,7 +29,7 @@ namespace SahlhaApp.Areas.Customer.Controllers
             _notificationHandler.Subscribe(_jobService);
         }
 
-        [HttpPost("")]
+        [HttpPost("PostJob")]
         public async Task<IActionResult> PostJob([FromBody] PostJobRequest postJobRequest)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
@@ -40,7 +40,7 @@ namespace SahlhaApp.Areas.Customer.Controllers
 
             var job = new Job
             {
-                Name=postJobRequest.Name,
+                //Name=postJobRequest.Name,
                 SubServiceId=postJobRequest.SubServiceId,
                 Description = postJobRequest.Description,
                 Latitude = postJobRequest.Latitude,
@@ -50,9 +50,7 @@ namespace SahlhaApp.Areas.Customer.Controllers
                 JobStatus = JobStatus.Pending
             };
 
-            await _unitOfWork.Job.Add(job);
-
-            var subService = await _unitOfWork.SubService.GetOne(s => s.Id == job.SubServiceId);
+       //     var subService = await _unitOfWork.SubService.GetOne(s => s.Id == job.SubServiceId);
 
             //    Duration = postJobRequest.Duration,
             //    ApplicationUserId = postJobRequest.ApplicationUserId

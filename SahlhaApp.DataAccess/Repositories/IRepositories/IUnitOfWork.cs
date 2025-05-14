@@ -26,7 +26,7 @@ namespace SahlhaApp.DataAccess.Repositories.IRepositories
         IUserRepository User { get; }
         IDisputeRepository Dispute { get; } 
         ISubscriptionRepository Subscription { get; } 
-
+        IContactUsMessageRepository ContactUsMessage { get; }
         IScheduledTask ScheduledTask { get; }
         public Task Commit();
     }

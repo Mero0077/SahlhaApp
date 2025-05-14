@@ -11,12 +11,13 @@ namespace SahlhaApp.Models.DTOs.Request.RegisterRequest
     {
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
-        //public string? UserName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Email can not be blank!")]
+
         public string Email { get; set; }
 
         [Required]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
 
         [Required]
