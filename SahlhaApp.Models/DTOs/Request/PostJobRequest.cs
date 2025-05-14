@@ -26,8 +26,8 @@ namespace SahlhaApp.Models.DTOs.Request
             //public decimal Duration { get; set; }
             public JobStatus? jobStatus { get; set; } = JobStatus.Pending;
 
-        public double Latitude { get; set; } = 30.061756325337448;
-        public double Longitude { get; set; } = 31.328177285349785;
+        public double Latitude { get; set; } 
+        public double Longitude { get; set; }
     }
 
     }

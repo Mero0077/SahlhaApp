@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace SahlhaApp.Models.Models
 {
-    public class DocumentType
+    public class Cart
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-
-        public ICollection<Document> Documents { get; set; }
+        public int ProviderId { get; set; }
+        public string ApplicationUserId { get; set; }
     }
 }

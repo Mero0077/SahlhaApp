@@ -13,7 +13,7 @@ namespace SahlhaApp.Areas.Provider.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [AllowAnonymous]
     public class PendingProviderVerificationController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -27,23 +27,39 @@ namespace SahlhaApp.Areas.Provider.Controllers
         }
 
         [HttpPost("JoinAsProvider")]
-        public async Task<IActionResult> JoinAsProvider()
+        public async Task<IActionResult> JoinAsProvider([FromForm] ProviderRequestDto providerRequestDto)
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user is null) return NotFound("User not found");
+            var userexists= _userManager.FindByIdAsync(providerRequestDto.ApplicationUserId);
+            if (userexists == null) return Unauthorized();
 
-            //providerRequestDto.ApplicationUserId = user.Id;
-            //var provider = providerRequestDto.Adapt<SahlhaApp.Models.Models.PendingProviderVerification>();
+            var fileMap = await DocumentHelper.HandleProviderDocumentsAsync(providerRequestDto.Id, providerRequestDto.BirthCertificate, providerRequestDto.CriminalRecord);
 
+           
+            foreach (var document in fileMap)
+            {
+                var docType = await _unitOfWork.DocumentType.GetOne(dt => dt.Name == document.Key);
+
+                if (docType == null) return BadRequest($"Invalid document type: {document.Key}");
+
+                var doc = new Document()
+                {
+                    Name = document.Key,
+                    Url=document.Value,
+                    UploadedAt = DateTime.Now,
+                    ApplicationUserId = providerRequestDto.ApplicationUserId,
+                    DocumentTypeId=docType.Id
+
+                };
+                await _unitOfWork.Document.Add(doc);
+            }
             await _unitOfWork.PendingProviderVerification.Add(new()
             {
                 appliedAt  = DateTime.Now,
                 VerificationStatus  = VerificationStatus.Pending,
-                ApplicationUserId = user.Id
+                ApplicationUserId = providerRequestDto.ApplicationUserId
             });
-            await _unitOfWork.PendingProviderVerification.Commit();
 
-            return Ok();
+            return Ok("Provider application submitted successfully.");
         }
     }
 }   

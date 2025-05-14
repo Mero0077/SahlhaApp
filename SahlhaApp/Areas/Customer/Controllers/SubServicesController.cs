@@ -6,7 +6,7 @@ namespace SahlhaApp.Areas.Customer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [AllowAnonymous]
     public class SubServicesController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;

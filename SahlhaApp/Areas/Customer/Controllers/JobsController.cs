@@ -14,7 +14,7 @@ namespace SahlhaApp.Areas.Customer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [AllowAnonymous]
     public class JobsController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -50,7 +50,7 @@ namespace SahlhaApp.Areas.Customer.Controllers
                 JobStatus = JobStatus.Pending
             };
 
-       //     var subService = await _unitOfWork.SubService.GetOne(s => s.Id == job.SubServiceId);
+          var subService = await _unitOfWork.SubService.GetOne(s => s.Id == job.SubServiceId);
 
             //    Duration = postJobRequest.Duration,
             //    ApplicationUserId = postJobRequest.ApplicationUserId

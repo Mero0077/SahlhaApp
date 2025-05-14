@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -68,6 +69,13 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddAuthorization(options =>
+{
+    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+});
+
 // Repositories
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -135,7 +143,6 @@ var app = builder.Build();
     }
 
 
-
     app.UseCors("AllowAll");
     app.MapHub<JobHub>("/JobHub");
     app.UseHttpsRedirection();
@@ -144,11 +151,5 @@ var app = builder.Build();
     app.UseAuthorization();
 
     app.MapControllers();
-
-//app.UseEndpoints(endpoints =>
-//{
-//    endpoints.MapHub<JobHub>("/jobhub");  // Ensure this is correct
-//});
-// Run the application
-app.Run();
+    app.Run();
 

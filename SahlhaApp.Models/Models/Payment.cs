@@ -9,12 +9,14 @@ namespace SahlhaApp.Models.Models
     public enum PaymentStatus
     {
         Pending,
+        InProgress,
         Completed,
         Failed
     }
     public class Payment
     {
         public int Id { get; set; }
+        public string SessionId { get; set; }
         public decimal Amount { get; set; }
         public DateTime PaymentDate { get; set; } = DateTime.Now;
         public string TransactionId { get; set; }

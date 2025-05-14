@@ -23,8 +23,9 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace SahlhaApp.Areas.Identity.Controllers
 {
-    [Route("api/[controller]")]
+     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class AccountController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;

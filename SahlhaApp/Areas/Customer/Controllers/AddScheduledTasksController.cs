@@ -1,4 +1,5 @@
 ﻿using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +11,7 @@ namespace SahlhaApp.Areas.Customer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class AddScheduledTasksController : ControllerBase
     {
         private readonly IUnitOfWork _UnitOfWork;
@@ -31,7 +33,7 @@ namespace SahlhaApp.Areas.Customer.Controllers
         }
 
 
-        [HttpPost("AddScheduledTask")]
+        [HttpPost("")]
         public async Task<IActionResult> AddScheduledTask([FromBody] PostScheduledTaskRequest postScheduledTaskRequest)
         {
             var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier); // from jwt  
@@ -39,6 +41,7 @@ namespace SahlhaApp.Areas.Customer.Controllers
 
             if (user == null) return BadRequest("User not found.");
 
+            if (postScheduledTaskRequest.ScheduledFor <= DateTime.Now) return BadRequest("date is incorrect");
             var scheduledTask = postScheduledTaskRequest.Adapt<ScheduledTask>();
             scheduledTask.ApplicationUserId = UserId;
 

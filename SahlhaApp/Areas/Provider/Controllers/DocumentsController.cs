@@ -19,34 +19,34 @@ namespace SahlhaApp.Areas.Provider.Controllers
             this._userManager = userManager;
         }
 
-        [HttpPost("UploadDocuments")]
-        public async Task<IActionResult> UploadDocuments([FromForm] DocumentRequestDto documentRequestDto)
-        {
-            var user = await _userManager.GetUserAsync(User); if (user is null) return NotFound("User not found");
+        //[HttpPost("UploadDocuments")]
+        //public async Task<IActionResult> UploadDocuments([FromForm] DocumentRequestDto documentRequestDto)
+        //{
+        //    var user = await _userManager.GetUserAsync(User); if (user is null) return NotFound("User not found");
 
-            if (documentRequestDto is null || documentRequestDto.File == null || !documentRequestDto.File.Any()) return BadRequest("No files uploaded.");
+        //    if (documentRequestDto is null || documentRequestDto.File == null || !documentRequestDto.File.Any()) return BadRequest("No files uploaded.");
 
-            var fileNames = await DocumentHelper.HandleMultipleFiles(documentRequestDto.File);
+        //    var fileNames = await DocumentHelper.HandleMultipleFiles(documentRequestDto.File);
 
-            if (fileNames == null || !fileNames.Any()) return StatusCode(500, "Error saving files.");
+        //    if (fileNames == null || !fileNames.Any()) return StatusCode(500, "Error saving files.");
 
-            foreach (var fileName in fileNames)
-            {
-                await _unitOfWork.Document.Add(new Document
-                {
-                    Name = fileName,
-                    Url = fileName,
-                    UploadedAt = DateTime.UtcNow,
-                    Status = Status.Pending,
-                    VerifiedAt = null,
-                    ApplicationUserId = user.Id
-                });
-            }
+        //    foreach (var fileName in fileNames)
+        //    {
+        //        await _unitOfWork.Document.Add(new Document
+        //        {
+        //            Name = fileName,
+        //            Url = fileName,
+        //            UploadedAt = DateTime.UtcNow,
+        //            Status = Status.Pending,
+        //            VerifiedAt = null,
+        //            ApplicationUserId = user.Id
+        //        });
+        //    }
 
-            await _unitOfWork.Document.Commit();
+        //    await _unitOfWork.Document.Commit();
 
-            return Ok(new { Message = "Files uploaded successfully", Files = fileNames });
-        }
+        //    return Ok(new { Message = "Files uploaded successfully", Files = fileNames });
+        //}
 
 
     }

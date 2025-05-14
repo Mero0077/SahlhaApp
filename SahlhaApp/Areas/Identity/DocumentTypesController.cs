@@ -6,7 +6,6 @@ namespace SahlhaApp.Areas.Identity
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class DocumentTypesController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;

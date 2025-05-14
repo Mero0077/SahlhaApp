@@ -17,7 +17,6 @@ namespace SahlhaApp.Areas.Identity
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class ProfileController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;

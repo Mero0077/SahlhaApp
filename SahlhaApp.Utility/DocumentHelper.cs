@@ -9,7 +9,7 @@ namespace SahlhaApp.Utility
 {
     public class DocumentHelper
     {
-        private static string FilePath = "C:\\Users\\pc\\Desktop\\Medicio\\Medicio\\assets\\img"; // Change the file path as needed
+        private static string FilePath = "D:\\Images"; // Change the file path as needed
 
         // Handle a single file upload or update (delete old file if necessary)
         public static async Task<string> HandleSingleFile(IFormFile file, string oldFileName = null)
@@ -33,30 +33,36 @@ namespace SahlhaApp.Utility
         }
 
         // Handle multiple file uploads
-        public static async Task<List<string>> HandleMultipleFiles(List<IFormFile> files)
+        public static async Task<Dictionary<string, string>> HandleProviderDocumentsAsync(IFormFile idDocument, IFormFile birthCertificate, IFormFile criminalRecord)
         {
-            if (files == null || !files.Any())
-                throw new ArgumentException("No files uploaded.");
-
             Directory.CreateDirectory(FilePath);
 
-            var fileNames = new List<string>();
+            var fileMap = new Dictionary<string, string>();
 
-            foreach (var file in files)
+            async Task<string> SaveFile(IFormFile file)
             {
                 var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
                 var filePath = Path.Combine(FilePath, fileName);
-
                 using (var stream = File.Create(filePath))
                 {
                     await file.CopyToAsync(stream);
                 }
-
-                fileNames.Add(fileName);
+                return fileName;
             }
 
-            return fileNames;
+            if (idDocument != null)
+                fileMap["Id"] = await SaveFile(idDocument);
+
+            if (birthCertificate != null)
+                fileMap["BirthCertificate"] = await SaveFile(birthCertificate);
+
+            if (criminalRecord != null)
+                fileMap["CriminalRecord"] = await SaveFile(criminalRecord);
+
+            return fileMap;
         }
+    
+
 
         // Delete a file if it exists
         public static void DeleteFile(string fileName)
