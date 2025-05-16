@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SahlhaApp.DataAccess.Data;
 using SahlhaApp.DataAccess.Repositories;
 using SahlhaApp.DataAccess.Repositories.IRepositories;
+using SahlhaApp.Models.DTOs;
 using SahlhaApp.Models.Models;
 using SahlhaApp.Utility;
 using SahlhaApp.Utility.NotifcationService;
@@ -17,6 +19,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddSignalR();
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
@@ -59,7 +62,7 @@ builder.Services.AddAuthentication(options =>
             var accessToken = context.Request.Query["access_token"];
             var path = context.HttpContext.Request.Path;
 
-            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/jobhub"))
+            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/jobHub"))
             {
                 context.Token = accessToken;
             }
@@ -69,17 +72,17 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.Services.AddAuthorization(options =>
-{
-    options.FallbackPolicy = new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser()
-        .Build();
-});
+
+//builder.Services.AddAuthorization(options =>
+//{
+//    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+//        .RequireAuthenticatedUser()
+//        .Build();
+//});
 
 // Repositories
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-builder.Services.AddSignalR();
 
 
 
@@ -102,14 +105,19 @@ builder.Services.AddHttpClient();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
-        policy
+    options.AddPolicy("AllowFrontend", builder =>
+    {
+        builder
+            .WithOrigins(
+                "http://127.0.0.1:5500",
+                "http://localhost:5500"
+            )
             .AllowAnyHeader()
             .AllowAnyMethod()
-            .AllowCredentials()
-            .SetIsOriginAllowed(_ => true) // allow all origins (only for dev!)
-    );
+            .AllowCredentials(); // Required for SignalR with JWT auth
+    });
 });
+
 
 
 var app = builder.Build();
@@ -143,13 +151,14 @@ var app = builder.Build();
     }
 
 
-    app.UseCors("AllowAll");
-    app.MapHub<JobHub>("/JobHub");
-    app.UseHttpsRedirection();
+app.UseCors("AllowFrontend");
+app.UseHttpsRedirection();
     
     app.UseAuthentication();
     app.UseAuthorization();
 
-    app.MapControllers();
-    app.Run();
+app.MapControllers();
+app.MapHub<JobHub>("/jobHub");
+app.Run();
 
+ 

@@ -56,7 +56,8 @@ namespace SahlhaApp.Areas.Identity.Controllers
 
             var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.NameIdentifier, user.Id),
+            //new Claim(ClaimTypes.NameIdentifier, user.Id),
+              new Claim("nameid", user.Id),
             new Claim(ClaimTypes.Email, user.Email),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
@@ -111,14 +112,14 @@ namespace SahlhaApp.Areas.Identity.Controllers
             }
 
             await _userManager.AddToRoleAsync(user, "User");
-            var accessToken = GenerateToken(user);
+            //var accessToken = GenerateToken(user);
 
-            return Ok(new
-            {
-                token = accessToken,
-                message = "Registration successful!"
-            });
-
+            //return Ok(new
+            //{
+            //    token = accessToken,
+            //    message = "Registration successful!"
+            //});
+            return Ok(new { Message = "Registration successful!" });
         }
 
         [HttpPost("ConfirmEmail")]

@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using SahlhaApp.DataAccess.Data;
 using SahlhaApp.DataAccess.Repositories.IRepositories;
 using SahlhaApp.Models.Models;
@@ -16,18 +18,21 @@ using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 
 namespace SahlhaApp.Utility.NotifcationService
 {
+    [AllowAnonymous]
     public class JobPostedNotificationHandler
     {
         private readonly ApplicationDbContext _context;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IHubContext<JobHub> _hubContext;
+        private readonly IServiceScopeFactory _scopeFactory;
 
 
-        public JobPostedNotificationHandler(ApplicationDbContext context, IUnitOfWork unitOfWork, IHubContext<JobHub> hubContext)
+        public JobPostedNotificationHandler(ApplicationDbContext context, IUnitOfWork unitOfWork, IHubContext<JobHub> hubContext, IServiceScopeFactory scopeFactory)
         {
             _context = context;
             _unitOfWork = unitOfWork;
             _hubContext = hubContext;
+            _scopeFactory = scopeFactory;
         }
 
         //subscribe to event
@@ -149,7 +154,13 @@ namespace SahlhaApp.Utility.NotifcationService
 
         public async Task OnJobPosted(OnJobPostedEvent jobPostedEvent)
         {
-           var job = jobPostedEvent.Job;
+            using var scope = _scopeFactory.CreateScope();
+            var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+            var hubContext = scope.ServiceProvider.GetRequiredService<IHubContext<JobHub>>();
+
+
+
+            var job = jobPostedEvent.Job;
             Console.WriteLine($"Job posted: {job.Description}. Sending notifications...");
 
 
@@ -194,8 +205,9 @@ namespace SahlhaApp.Utility.NotifcationService
 
                 try
                 {
-                    await _unitOfWork.Notification.Add(notification);
+                    await unitOfWork.Notification.Add(notification);
 
+                    Console.WriteLine("Broadcasting job to all clients...");
                     await _hubContext.Clients.User(userId).SendAsync("ReceiveJobNotification", new
                     {
                         JobId = job.Id,
@@ -204,6 +216,8 @@ namespace SahlhaApp.Utility.NotifcationService
                         job.SubServiceId,
                         job.CreatedAt
                     });
+
+
                 }
                 catch (Exception ex)
                 {
@@ -212,6 +226,6 @@ namespace SahlhaApp.Utility.NotifcationService
                
                
             }
-        }
+            }
     }
 }

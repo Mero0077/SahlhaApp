@@ -15,7 +15,7 @@ namespace SahlhaApp.Areas.Customer.Controllers
             this._unitOfWork = unitOfWork;
         }
 
-        [HttpGet("")]
+        [HttpGet("GetSubServices")]
         public async Task<IActionResult> GetSubServices()
         {
             var subServices =  _unitOfWork.SubService.GetAll();

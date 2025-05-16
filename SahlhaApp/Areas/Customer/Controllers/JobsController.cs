@@ -29,6 +29,7 @@ namespace SahlhaApp.Areas.Customer.Controllers
             _notificationHandler.Subscribe(_jobService);
         }
 
+
         [HttpPost("PostJob")]
         public async Task<IActionResult> PostJob([FromBody] PostJobRequest postJobRequest)
         {
@@ -50,17 +51,31 @@ namespace SahlhaApp.Areas.Customer.Controllers
                 JobStatus = JobStatus.Pending
             };
 
-          var subService = await _unitOfWork.SubService.GetOne(s => s.Id == job.SubServiceId);
-
+            try
+            {
+                var subService = await _unitOfWork.SubService.GetOne(s => s.Id == job.SubServiceId);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error retrieving SubService: {ex.Message}");
+            }
             //    Duration = postJobRequest.Duration,
             //    ApplicationUserId = postJobRequest.ApplicationUserId
             //}; 
-            var addedJob = await _jobService.AddJobAsync(job);
+
+            try
+            {
+                var addedJob = await _jobService.AddJobAsync(job);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error adding job: {ex.Message}");
+            }
 
             var response = new
             {
                 Message = "Job Posted successfully!",
-                Data = addedJob
+                //Data = addedJob
             };
 
             return Ok(response);

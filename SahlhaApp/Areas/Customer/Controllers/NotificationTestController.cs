@@ -1,35 +1,28 @@
-﻿using Mapster;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
-using SahlhaApp.Models.DTOs.Response.Services;
 using SahlhaApp.Utility.NotifcationService;
-
 namespace SahlhaApp.Areas.Customer.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
-    public class ServicesController : ControllerBase
+    [Route("api/[controller]")]
+    [AllowAnonymous]
+    public class NotificationTestController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
-
         private readonly IHubContext<JobHub> _hubContext;
-        public ServicesController(IUnitOfWork unitOfWork, IHubContext<JobHub> hubContext)
+
+        public NotificationTestController(IHubContext<JobHub> hubContext)
         {
-            this._unitOfWork = unitOfWork;
             _hubContext = hubContext;
         }
-
-
-      
 
         public class UserIdDto
         {
             public string UserId { get; set; }
         }
 
-        [HttpPost("k")]
+        [HttpPost("")]
         public async Task<IActionResult> SendTestNotification([FromBody] UserIdDto dto)
         {
             await _hubContext.Clients.User(dto.UserId).SendAsync("ReceiveJobNotification", new
@@ -43,18 +36,5 @@ namespace SahlhaApp.Areas.Customer.Controllers
 
             return Ok($"✅ Sent notification to userId: {dto.UserId}");
         }
-
-        [HttpGet("")]
-        public async Task<IActionResult> Services()
-        {
-            var subServices= _unitOfWork.SubService.GetAll();
-            var services = _unitOfWork.Service
-                .GetAll(e => e.Status == true, includes: [e=>e.SubServices])
-                .ToList()
-                .Adapt<List<ServiceResponseDto>>();
-
-            return Ok(services);
-        }
-
     }
 }
