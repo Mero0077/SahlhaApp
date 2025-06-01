@@ -13,6 +13,6 @@ namespace SahlhaApp.Models.DTOs.Request
         public decimal Amount { get; set; }
         public int Duration { get; set; }
         public int JobId { get; set; }
-        public int ProviderId { get; set; }
+        //public int ProviderId { get; set; }
     }
 }

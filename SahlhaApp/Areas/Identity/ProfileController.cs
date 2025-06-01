@@ -26,8 +26,8 @@ namespace SahlhaApp.Areas.Identity
 
         public ProfileController(UserManager<ApplicationUser> userManager, IUnitOfWork unitOfWork)
         {
-            this._userManager = userManager;
-           _unitOfWork = unitOfWork;
+            _userManager = userManager;
+            _unitOfWork = unitOfWork;
         }
 
 
@@ -41,7 +41,7 @@ namespace SahlhaApp.Areas.Identity
 
             var userInfo = user.Adapt<ProfileInfoResponseDto>();
             var userInProviderRequestes = await _unitOfWork.PendingProviderVerification.GetOne(e => e.ApplicationUserId == userId);
-            if(userInProviderRequestes is not null) userInfo.IsRequested = true;
+            if (userInProviderRequestes is not null) userInfo.IsRequested = true;
 
             return Ok(userInfo);
         }
@@ -96,6 +96,6 @@ namespace SahlhaApp.Areas.Identity
             return Ok(new { Message = "Password updated successfully" });
         }
 
-     
+
     }
 }

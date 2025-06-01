@@ -9,11 +9,11 @@ using SahlhaApp.Models.DTOs.Request;
 using SahlhaApp.Models.DTOs.Request.Provider;
 using SahlhaApp.Models.Models;
 
-namespace SahlhaApp.Areas.Provider.Controllers
+namespace SahlhaApp.Areas.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [AllowAnonymous]
+    //[Authorize(Roles = "Provider")]
     public class PendingProviderVerificationController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -22,19 +22,19 @@ namespace SahlhaApp.Areas.Provider.Controllers
         public PendingProviderVerificationController(UserManager<ApplicationUser> userManager,
             IUnitOfWork unitOfWork)
         {
-            this._userManager = userManager;
-            this._unitOfWork = unitOfWork;
+            _userManager = userManager;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpPost("JoinAsProvider")]
         public async Task<IActionResult> JoinAsProvider([FromForm] ProviderRequestDto providerRequestDto)
         {
-            var userexists= _userManager.FindByIdAsync(providerRequestDto.ApplicationUserId);
+            var userexists = _userManager.FindByIdAsync(providerRequestDto.ApplicationUserId);
             if (userexists == null) return Unauthorized();
 
             var fileMap = await DocumentHelper.HandleProviderDocumentsAsync(providerRequestDto.Id, providerRequestDto.BirthCertificate, providerRequestDto.CriminalRecord);
 
-           
+
             foreach (var document in fileMap)
             {
                 var docType = await _unitOfWork.DocumentType.GetOne(dt => dt.Name == document.Key);
@@ -44,22 +44,22 @@ namespace SahlhaApp.Areas.Provider.Controllers
                 var doc = new Document()
                 {
                     Name = document.Key,
-                    Url=document.Value,
+                    Url = document.Value,
                     UploadedAt = DateTime.Now,
                     ApplicationUserId = providerRequestDto.ApplicationUserId,
-                    DocumentTypeId=docType.Id
+                    DocumentTypeId = docType.Id
 
                 };
                 await _unitOfWork.Document.Add(doc);
             }
             await _unitOfWork.PendingProviderVerification.Add(new()
             {
-                appliedAt  = DateTime.Now,
-                VerificationStatus  = VerificationStatus.Pending,
+                appliedAt = DateTime.Now,
+                VerificationStatus = VerificationStatus.Pending,
                 ApplicationUserId = providerRequestDto.ApplicationUserId
             });
 
             return Ok("Provider application submitted successfully.");
         }
     }
-}   
+}

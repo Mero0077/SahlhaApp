@@ -20,10 +20,11 @@ using SahlhaApp.Models.DTOs.Request.Profile;
 using System.Text.Json;
 using SahlhaApp.Models.DTOs.Response.Location;
 using Microsoft.AspNetCore.Authorization;
+using System.Net.NetworkInformation;
 
-namespace SahlhaApp.Areas.Identity.Controllers
+namespace SahlhaApp.Areas.Identity
 {
-     [Route("api/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     [AllowAnonymous]
     public class AccountController : ControllerBase
@@ -49,18 +50,25 @@ namespace SahlhaApp.Areas.Identity.Controllers
             _httpClient = httpClient;
             _unitOfWork = unitOfWork;
         }
-
-        private string GenerateToken(ApplicationUser user)
+        private async Task<string> GenerateToken(ApplicationUser user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
 
+            // Get the user's roles from AspNetUserRoles
+            var userRoles = await _userManager.GetRolesAsync(user);
+
             var claims = new List<Claim>
-        {
-            //new Claim(ClaimTypes.NameIdentifier, user.Id),
-              new Claim("nameid", user.Id),
-            new Claim(ClaimTypes.Email, user.Email),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        };
+    {
+        new Claim("nameid", user.Id),
+        new Claim(ClaimTypes.Email, user.Email),
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+    };
+
+            // Add all roles to the token
+            foreach (var role in userRoles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SigninKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -142,7 +150,7 @@ namespace SahlhaApp.Areas.Identity.Controllers
             if (user.Email != loginRequestDto.Email || !await _userManager.CheckPasswordAsync(user, loginRequestDto.Password))
                 return Unauthorized(new { Message = "Invalid email or password" });
 
-            var accessToken= GenerateToken(user);
+            var accessToken = await GenerateToken(user);
             return Ok(accessToken);
         }
 
@@ -192,7 +200,7 @@ namespace SahlhaApp.Areas.Identity.Controllers
             return BadRequest(new { Message = "Invalid OTP" });
         }
 
-        
+
         [HttpPost("ResetPassword")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequestDto resetPasswordRequestDto)
         {

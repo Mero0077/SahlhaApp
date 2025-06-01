@@ -93,10 +93,10 @@ namespace SahlhaApp.DataAccess.Repositories
             return query;
         }
 
-        public async Task<T?> GetOne(Expression<Func<T, bool>>? filter = null, Expression<Func<T, object>>[]? includes = null, bool tracked = true)
-        {
-            return await GetAll(filter, includes, tracked).FirstOrDefaultAsync();
-        }
+            public async Task<T?> GetOne(Expression<Func<T, bool>>? filter = null, Expression<Func<T, object>>[]? includes = null, bool tracked = true)
+            {
+                return await GetAll(filter, includes, tracked).FirstOrDefaultAsync();
+            }
 
         public async Task<bool> Exists(Expression<Func<T, bool>> filter)
         {

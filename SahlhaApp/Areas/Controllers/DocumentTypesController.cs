@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace SahlhaApp.Areas.Identity
+namespace SahlhaApp.Areas.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -11,7 +11,7 @@ namespace SahlhaApp.Areas.Identity
         private readonly IUnitOfWork _unitOfWork;
         public DocumentTypesController(IUnitOfWork unitOfWork)
         {
-            this._unitOfWork = unitOfWork;
+            _unitOfWork = unitOfWork;
         }
         [HttpGet("")]
         public async Task<IActionResult> GetDocumentTypes()

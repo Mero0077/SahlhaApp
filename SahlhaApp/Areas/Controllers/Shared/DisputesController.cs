@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SahlhaApp.Models.DTOs.Request.DisputeRequests;
 using System.Security.Claims;
 
-namespace SahlhaApp.Areas.Shared.Controllers
+namespace SahlhaApp.Areas.Controllers.Shared
 {
     [Route("api/[controller]")]
     [ApiController]

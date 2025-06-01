@@ -9,6 +9,6 @@ namespace SahlhaApp.Models.DTOs.Request
     public class AcceptProviderRequest
     {
         public int TaskBidId { get; set; }
-        public string ApplicationUserId { get; set; }
+        //public string ApplicationUserId { get; set; }
     }
 }

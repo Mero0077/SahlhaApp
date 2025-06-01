@@ -39,7 +39,7 @@ namespace SahlhaApp.DataAccess.Data
             await context.Database.MigrateAsync();
 
             // List of default roles we want to ensure exist
-            var roles = new[] { "SuperAdmin", "Admin", "Doctor", "User" };
+            var roles = new[] { "SuperAdmin", "Admin", "Provider", "User" };
 
             // Check if each role exists; if not, create it
             foreach (var role in roles)

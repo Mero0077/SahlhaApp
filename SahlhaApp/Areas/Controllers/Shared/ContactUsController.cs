@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SahlhaApp.Models.DTOs.Request.ContactUs;
 
-namespace SahlhaApp.Areas.Shared.Controllers
+namespace SahlhaApp.Areas.Controllers.Shared
 {
     [Route("api/[controller]")]
     [ApiController]

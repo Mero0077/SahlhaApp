@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using SahlhaApp.Models.DTOs.Response.TaskPaid;
 using System.Security.Claims;
 
-namespace SahlhaApp.Areas.Customer.Controllers
+namespace SahlhaApp.Areas.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -17,8 +17,8 @@ namespace SahlhaApp.Areas.Customer.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         public GetPaidsController(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager)
         {
-            this._unitOfWork = unitOfWork;
-            this._userManager = userManager;
+            _unitOfWork = unitOfWork;
+            _userManager = userManager;
         }
 
         [HttpGet("")]

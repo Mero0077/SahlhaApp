@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SahlhaApp.Models.DTOs.Response.Status;
 
-namespace SahlhaApp.Areas.Customer.Controllers
+namespace SahlhaApp.Areas.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -11,7 +11,7 @@ namespace SahlhaApp.Areas.Customer.Controllers
         private readonly IUnitOfWork _unitOfWork;
         public StatusController(IUnitOfWork unitOfWork)
         {
-            this._unitOfWork = unitOfWork;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet("")]

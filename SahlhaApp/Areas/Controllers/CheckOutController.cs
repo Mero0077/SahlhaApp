@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Stripe.Checkout;
 
 
-namespace SahlhaApp.Areas.Customer.Controllers
+namespace SahlhaApp.Areas.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -12,7 +12,7 @@ namespace SahlhaApp.Areas.Customer.Controllers
 
         //public void UpdateCartWithProviderAndTaskDetails(Order order)
         //{
-            
+
         //    // After updating, we can proceed to create the Stripe session for checkout.
         //    var stripeOptions = CreateStripeOptions(order);
         //    AddStripeLines(order.CartItems, stripeOptions);
@@ -43,7 +43,7 @@ namespace SahlhaApp.Areas.Customer.Controllers
         //// Add the selected cart items to the Stripe checkout session
         //public void AddStripeLines( Dispute cart, Stripe.Checkout.SessionCreateOptions options)
         //{
-            
+
 
         //        // Add the line item to Stripe
         //        options.LineItems.Add(new SessionLineItemOptions
@@ -58,9 +58,9 @@ namespace SahlhaApp.Areas.Customer.Controllers
         //                },
         //                UnitAmount = (long)(cart.Product.Price * 100), // Convert price to the smallest unit (cents)
         //            },
-                  
+
         //        });
-            
+
         //}
 
     }

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using SahlhaApp.Models.DTOs.Request;
 using System.Security.Claims;
 
-namespace SahlhaApp.Areas.Shared.Controllers
+namespace SahlhaApp.Areas.Controllers.Shared
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -16,7 +16,7 @@ namespace SahlhaApp.Areas.Shared.Controllers
 
         public ReviewsController(UserManager<ApplicationUser> userManager, IUnitOfWork unitOfWork)
         {
-            this._userManager = userManager;
+            _userManager = userManager;
             _unitOfWork = unitOfWork;
         }
 
@@ -35,8 +35,8 @@ namespace SahlhaApp.Areas.Shared.Controllers
 
             // Check for existing rating
             bool alreadyRated = await _unitOfWork.Rate.Exists(e =>
-                (e.ApplicationUserId == raterId && e.Provider.ApplicationUserId == rateUserRequest.RatedUserId) ||
-                (e.Provider.ApplicationUserId == raterId && e.ApplicationUserId == rateUserRequest.RatedUserId));
+                e.ApplicationUserId == raterId && e.Provider.ApplicationUserId == rateUserRequest.RatedUserId ||
+                e.Provider.ApplicationUserId == raterId && e.ApplicationUserId == rateUserRequest.RatedUserId);
 
             if (alreadyRated)
                 return BadRequest("You have already rated this user.");
@@ -46,8 +46,8 @@ namespace SahlhaApp.Areas.Shared.Controllers
                 .GetAll(includes: [a => a.Job, a => a.Provider])
                 .Where(a => a.IsAccepted && a.Job.JobStatus == JobStatus.Completed)
                 .FirstOrDefaultAsync(a =>
-                    (a.Provider.ApplicationUserId == rateUserRequest.RatedUserId && a.Job.ApplicationUserId == raterId) ||
-                    (a.Provider.ApplicationUserId == raterId && a.Job.ApplicationUserId == rateUserRequest.RatedUserId));
+                    a.Provider.ApplicationUserId == rateUserRequest.RatedUserId && a.Job.ApplicationUserId == raterId ||
+                    a.Provider.ApplicationUserId == raterId && a.Job.ApplicationUserId == rateUserRequest.RatedUserId);
 
             if (assignment == null)
                 return BadRequest("No completed task found between you and this user.");

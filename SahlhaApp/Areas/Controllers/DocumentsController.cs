@@ -4,19 +4,19 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SahlhaApp.Models.DTOs.Request;
 
-namespace SahlhaApp.Areas.Provider.Controllers
+namespace SahlhaApp.Areas.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize(Roles ="Provider")]
     public class DocumentsController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<ApplicationUser> _userManager;
         public DocumentsController(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager)
         {
-            this._unitOfWork = unitOfWork;
-            this._userManager = userManager;
+            _unitOfWork = unitOfWork;
+            _userManager = userManager;
         }
 
         //[HttpPost("UploadDocuments")]

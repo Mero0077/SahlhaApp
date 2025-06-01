@@ -107,42 +107,49 @@ namespace SahlhaApp.Utility.NotifcationService
         }
         public async Task OnBidPlaced(OnBidPlacedEvent onBidPlacedEvent)
         {
+            using var scope = _scopeFactory.CreateScope();
+
+            var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+            var hubContext = scope.ServiceProvider.GetRequiredService<IHubContext<JobHub>>();
+
             var bid = onBidPlacedEvent.TaskBid;
             Console.WriteLine($"Bid posted: {bid.Description}. Sending notifications...");
 
-            //   var GetBid = await _unitOfWork.TaskBid.GetOne(e => e.Id == bid.Id, includes: [e=>e.Job,e=>e.Provider, e => e.Provider.ApplicationUser]); not optiized we getting all properties
-            var GetBid = await _unitOfWork.TaskBid.GetAll(e => e.Id == bid.Id).Select(e => new
+            var getBid = await unitOfWork.TaskBid.GetAll(e => e.Id == bid.Id).Select(e => new
             {
                 e.Id,
                 e.Amount,
-                JobOwnerId=e.Job.ApplicationUserId,
-                BidderName= e.Provider.ApplicationUser.FirstName+" "+ e.Provider.ApplicationUser.LastName
+                JobOwnerId = e.Job.ApplicationUserId,
+                BidderName = e.Provider.ApplicationUser.FirstName + " " + e.Provider.ApplicationUser.LastName
             }).FirstOrDefaultAsync();
 
-            if (GetBid == null) return;
+            if (getBid == null) return;
 
             var notification = new Notification()
             {
                 Title = "New Bid Available!",
-                Type = NotificationType.TaskBidded  ,
+                Type = NotificationType.TaskBidded,
                 ReferenceId = bid.Id,
-                Message = $"A new Bid for: {bid.Amount} Pounds from{GetBid.BidderName}",
+                Message = $"A new Bid for: {bid.Amount} Pounds from {getBid.BidderName}",
                 CreatedAt = DateTime.Now,
-                ApplicationUserId = GetBid.JobOwnerId,
+                ApplicationUserId = getBid.JobOwnerId,
                 IsRead = false
             };
 
             try
             {
-                await _unitOfWork.Notification.Add(notification);
+                await unitOfWork.Notification.Add(notification);
 
-                // SignalR: Send to the user who owns the job
-                await _hubContext.Clients.User(GetBid.JobOwnerId).SendAsync("ReceiveNotification", new
+                    await hubContext.Clients.User(getBid.JobOwnerId).SendAsync("ReceiveBidNotification", new
                 {
+                    id = bid.Id,
                     Title = notification.Title,
                     Message = notification.Message,
                     Type = notification.Type.ToString(),
-                    ReferenceId = notification.ReferenceId
+                    providerName = getBid.BidderName,
+                    amount = bid.Amount,
+                    duration = bid.Duration,
+                    description = bid.Description
                 });
             }
             catch (Exception ex)
@@ -150,6 +157,7 @@ namespace SahlhaApp.Utility.NotifcationService
                 Console.WriteLine($"Error occurred while sending notification: {ex.Message}");
             }
         }
+
 
 
         public async Task OnJobPosted(OnJobPostedEvent jobPostedEvent)

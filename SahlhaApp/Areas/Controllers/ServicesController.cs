@@ -1,4 +1,5 @@
 ﻿using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -6,10 +7,11 @@ using Microsoft.EntityFrameworkCore;
 using SahlhaApp.Models.DTOs.Response.Services;
 using SahlhaApp.Utility.NotifcationService;
 
-namespace SahlhaApp.Areas.Customer.Controllers
+namespace SahlhaApp.Areas.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "User,Provider")]
     public class ServicesController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -17,39 +19,16 @@ namespace SahlhaApp.Areas.Customer.Controllers
         private readonly IHubContext<JobHub> _hubContext;
         public ServicesController(IUnitOfWork unitOfWork, IHubContext<JobHub> hubContext)
         {
-            this._unitOfWork = unitOfWork;
+            _unitOfWork = unitOfWork;
             _hubContext = hubContext;
-        }
-
-
-      
-
-        public class UserIdDto
-        {
-            public string UserId { get; set; }
-        }
-
-        [HttpPost("k")]
-        public async Task<IActionResult> SendTestNotification([FromBody] UserIdDto dto)
-        {
-            await _hubContext.Clients.User(dto.UserId).SendAsync("ReceiveJobNotification", new
-            {
-                JobId = 1,
-                Name = "Test Job",
-                Description = "This is a test job sent manually.",
-                SubServiceId = 999,
-                CreatedAt = DateTime.UtcNow
-            });
-
-            return Ok($"✅ Sent notification to userId: {dto.UserId}");
         }
 
         [HttpGet("")]
         public async Task<IActionResult> Services()
         {
-            var subServices= _unitOfWork.SubService.GetAll();
+            var subServices = _unitOfWork.SubService.GetAll();
             var services = _unitOfWork.Service
-                .GetAll(e => e.Status == true, includes: [e=>e.SubServices])
+                .GetAll(e => e.Status == true, includes: [e => e.SubServices])
                 .ToList()
                 .Adapt<List<ServiceResponseDto>>();
 
