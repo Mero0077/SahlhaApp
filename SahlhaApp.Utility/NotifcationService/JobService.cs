@@ -55,7 +55,7 @@ namespace SahlhaApp.Utility.NotifcationService
             // Add job to database
             await _unitOfWork.Job.Add(job);
 
-            if (JobPostedEvent != null)
+             if (JobPostedEvent != null)
             {
                  JobPostedEvent?.Invoke(new OnJobPostedEvent(job));
             }

@@ -21,6 +21,7 @@ namespace SahlhaApp.Areas.Controllers
             _jobService = jobService;
             _notificationHandler = jobPostedNotificationHandler;
             _notificationHandler.Subscribe(_jobService);
+            _notificationHandler.SubscribeTaskBid(_jobService);
         }
 
         [HttpPost("AcceptProviderBid")]
