@@ -12,6 +12,7 @@ using SahlhaApp.Models.Models;
 using SahlhaApp.Utility;
 using SahlhaApp.Utility.NotifcationService;
 using Scalar.AspNetCore;
+using Stripe;
 using System.Security.Claims;
 using System.Text;
 
@@ -118,7 +119,8 @@ builder.Services.AddCors(options =>
     });
 });
 
-
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
+StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
 var app = builder.Build();
 

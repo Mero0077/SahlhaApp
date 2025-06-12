@@ -43,6 +43,7 @@ namespace SahlhaApp.Areas.Controllers
                 return Unauthorized("User ID not found.");
 
             var userId = userIdClaim.Value;
+            var user = await _UserManager.FindByIdAsync(userId);
 
             var job = new Job
             {
@@ -53,7 +54,8 @@ namespace SahlhaApp.Areas.Controllers
                 Longitude = postJobRequest.Longitude,
                 CreatedAt = DateTime.UtcNow,
                 ApplicationUserId = userId,
-                JobStatus = JobStatus.Pending
+                JobStatus = JobStatus.Pending,
+                Name = user.FirstName+" "+user.LastName
             };
 
             try
