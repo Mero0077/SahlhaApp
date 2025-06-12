@@ -38,6 +38,7 @@ namespace SahlhaApp.Areas.Controllers
 
         public async Task<IActionResult> PostJob([FromBody] PostJobRequest postJobRequest)
         {
+            //hello
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
             if (userIdClaim == null || string.IsNullOrEmpty(userIdClaim.Value))
                 return Unauthorized("User ID not found.");
