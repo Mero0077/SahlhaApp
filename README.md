@@ -1,5 +1,5 @@
 # SahlhaApp
-A platform that empowers people to get things done — by instantly connecting them with trusted local experts.”
+A platform that empowers people to get things done — by instantly connecting them with local experts.
 
 ⸻
 
